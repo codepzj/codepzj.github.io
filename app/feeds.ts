@@ -1,0 +1,110 @@
+import type { FeedGroup } from './types/feed'
+
+export default [
+	{
+		name: '大佬',
+		desc: '长期输出与值得反复阅读的站点。',
+		entries: [
+			{
+				author: '李文周',
+				desc: '总结 Go 语言学习之路，提供免费的 Go 语言学习教程，希望与大家一起学习进步。',
+				link: 'https://www.liwenzhou.com/',
+				icon: 'https://avatars.githubusercontent.com/u/9710547?v=4',
+				avatar: 'https://avatars.githubusercontent.com/u/9710547?v=4',
+				date: '2026-07-24',
+			},
+			{
+				author: '宇阳',
+				desc: '记录所学知识，缩短和大神的差距！',
+				link: 'https://liuyuyang.net',
+				icon: 'https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640',
+				avatar: 'https://q1.qlogo.cn/g?b=qq&nk=3311118881&s=640',
+				date: '2026-07-24',
+			},
+			{
+				author: 'One',
+				desc: 'Teek 主题搬运工，明心静性，爱自己。',
+				link: 'https://onedayxyy.cn/',
+				icon: 'https://onedayxyy.cn/favicon.ico',
+				avatar: 'https://onedayxyy.cn/favicon.ico',
+				date: '2026-07-24',
+			},
+			{
+				author: '凤凰架构',
+				desc: '华为架构大佬，构建可靠的大型分布式系统。',
+				link: 'https://icyfenix.cn/',
+				icon: 'https://icyfenix.cn/images/logo-color.png',
+				avatar: 'https://icyfenix.cn/images/logo-color.png',
+				date: '2026-07-24',
+			},
+			{
+				author: 'W3C技术联盟',
+				desc: '让 Web 服务全人类。',
+				link: 'https://w3c.cool',
+				icon: 'https://w3c.cool/logo.svg',
+				avatar: 'https://w3c.cool/logo.svg',
+				date: '2026-07-24',
+			},
+			{
+				author: '陈明勇的博客',
+				desc: '一名热爱技术、乐于分享的开发者，同时也是开源爱好者。',
+				link: 'https://chenmingyong.cn',
+				icon: 'https://chenmingyong.cn/static/4a100f93f7e176fa8026f98f533abcd3.jpg',
+				avatar: 'https://chenmingyong.cn/static/4a100f93f7e176fa8026f98f533abcd3.jpg',
+				date: '2026-07-24',
+			},
+		],
+	},
+	{
+		name: '技术型',
+		desc: '工程、架构与技术实践相关的朋友。',
+		entries: [
+			{
+				author: '姓王者的博客',
+				desc: '探索、学习、进步、创造无限可能。',
+				link: 'https://xingwangzhe.fun',
+				icon: 'https://xingwangzhe.fun/avatar.webp',
+				avatar: 'https://xingwangzhe.fun/avatar.webp',
+				date: '2026-07-24',
+			},
+			{
+				author: 'Castamere',
+				desc: '代码美学。',
+				link: 'https://www.castamerego.com/',
+				icon: 'https://github.com/Casta-mere.png',
+				avatar: 'https://github.com/Casta-mere.png',
+				date: '2026-07-24',
+			},
+			{
+				author: '全栈奋斗者',
+				desc: '分享日常技术学习。',
+				link: 'https://www.yangworld.top',
+				icon: 'https://q1.qlogo.cn/g?b=qq&nk=2779643212&s=640',
+				avatar: 'https://q1.qlogo.cn/g?b=qq&nk=2779643212&s=640',
+				date: '2026-07-24',
+			},
+		],
+	},
+	{
+		name: '生活型',
+		desc: '记录日常、观点与个人表达的角落。',
+		entries: [
+			{
+				author: '旺东自留地',
+				desc: '爱生活、爱摸鱼。',
+				link: 'https://wang618.cn',
+				icon: 'https://wang618.cn/logo.gif',
+				avatar: 'https://wang618.cn/logo.gif',
+				date: '2026-07-24',
+			},
+			{
+				author: 'Frederick\'s Blog',
+				desc: 'Sky is the limit.',
+				link: 'https://www.ooowl.net/',
+				icon: 'https://www.ooowl.net/favicon.png',
+				avatar: 'https://www.ooowl.net/favicon.png',
+				date: '2026-07-24',
+			},
+		],
+	},
+] satisfies FeedGroup[]
