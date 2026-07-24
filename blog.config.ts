@@ -7,9 +7,9 @@ const basicConfig = {
 	description: '浩瀚星河的个人技术博客，记录 Golang 学习与开发实践。',
 	author: {
 		name: '浩瀚星河',
-		avatar: '/avatar.jpg',
+		avatar: 'https://codepzj.github.io/avatar.jpg',
 		email: '',
-		homepage: 'https://codepzj.github.io/',
+		homepage: 'https://codepzj.github.io',
 	},
 	copyright: {
 		abbr: 'CC BY-NC-SA 4.0',
@@ -20,7 +20,7 @@ const basicConfig = {
 	language: 'zh-CN',
 	timeEstablished: '2025-07-26',
 	timeZone: 'Asia/Shanghai',
-	url: 'https://codepzj.github.io/',
+	url: 'https://codepzj.github.io',
 	defaultCategory: '未分类',
 }
 
