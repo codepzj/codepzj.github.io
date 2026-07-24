@@ -80,7 +80,7 @@ minikube start --driver=docker --base-image=registry.cn-hangzhou.aliyuncs.com/go
 ## 安装kubectl
 
 ```bash
- curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 ```
 
 
