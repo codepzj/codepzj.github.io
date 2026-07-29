@@ -41,21 +41,7 @@ const byteSize = computed(() => formatBytes(new TextEncoder().encode(props.code)
 const codeblock = useTemplateRef('codeblock')
 const { copy, copied } = useCopy(codeblock)
 const shiki = useShiki()
-const rawHtml = ref(escape(normalizeCodeIndent(props.code)))
-
-function normalizeCodeIndent(code: string) {
-	const lines = code.replaceAll('\r\n', '\n').split('\n')
-	const contentLines = lines.filter(line => line.trim())
-	const commonIndent = Math.min(...contentLines.map(line => line.match(/^[\t ]*/)![0].length))
-
-	if (!Number.isFinite(commonIndent) || commonIndent === 0)
-		return code.trimEnd()
-
-	return lines
-		.map(line => line.trim() ? line.slice(commonIndent) : '')
-		.join('\n')
-		.trimEnd()
-}
+const rawHtml = ref(escape(props.code))
 
 function getIndent() {
 	if (meta.value.indent)
@@ -68,7 +54,7 @@ function getIndent() {
 }
 
 onMounted(async () => {
-	rawHtml.value = await shiki.codeToHtml(normalizeCodeIndent(props.code), {
+	rawHtml.value = await shiki.codeToHtml(props.code.trimEnd(), {
 		language: props.language,
 		transformerOptions: [compConf.value.enableIndentGuide ? 'ignoreRenderWhitespace' : 'ignoreRenderIndentGuides'],
 		shikiOptions: { meta: { indent: getIndent() } },
