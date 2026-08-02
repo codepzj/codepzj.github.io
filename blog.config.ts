@@ -39,6 +39,7 @@ const blogConfig = {
 			工程实践: { icon: 'tabler:tools', color: '#3b82f6' },
 			博客建设: { icon: 'tabler:article', color: '#ec4899' },
 			云原生: { icon: 'simple-icons:kubernetes', color: '#326ce5' },
+			移动开发: { icon: 'tabler:device-mobile-code', color: '#02569b' },
 			成长随笔: { icon: 'tabler:seedling', color: '#22c55e' },
 			后端开发: { icon: 'tabler:server-2', color: '#14b8a6' },
 			技术观察: { icon: 'tabler:bulb', color: '#f59e0b' },
