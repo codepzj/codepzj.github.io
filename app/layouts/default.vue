@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const { slots } = inject<any>(Symbol.for('dxup:layout-slots')) || {}
+
+const route = useRoute()
+const hasAside = computed(() => Boolean(slots?.aside) || !route.meta.noAside)
 </script>
 
 <template>
@@ -12,11 +15,11 @@ const { slots } = inject<any>(Symbol.for('dxup:layout-slots')) || {}
 		<slot />
 		<BlogFooter />
 	</main>
-	<BlogAside>
+	<BlogAside :reserved="hasAside">
 		<slot name="aside" />
 	</BlogAside>
 </div>
-<BlogPanel :has-aside="slots?.aside" />
+<BlogPanel :has-aside="hasAside" />
 <BikariyaModals />
 </template>
 

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineProps<{
+	reserved?: boolean
+}>()
+
 const layoutStore = useLayoutStore()
 </script>
 
@@ -11,7 +15,7 @@ const layoutStore = useLayoutStore()
 
 <!-- 不能用 Transition 实现弹出收起动画，因为宽屏状态始终显示 -->
 <!-- 如果为空数组则隐藏 -->
-<aside id="blog-aside" :class="{ show: layoutStore.state === 'aside' }">
+<aside id="blog-aside" :class="{ show: layoutStore.state === 'aside', reserved }">
 	<slot />
 </aside>
 </template>
@@ -51,7 +55,7 @@ const layoutStore = useLayoutStore()
 		}
 	}
 
-	&:empty {
+	&:empty:not(.reserved) {
 		display: none;
 	}
 }

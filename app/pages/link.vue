@@ -2,6 +2,8 @@
 import { myFeed } from '~~/blog.config'
 import feeds from '~/feeds'
 
+definePageMeta({ noAside: true })
+
 const appConfig = useAppConfig()
 
 const { data: postLink } = await useAsyncData(
