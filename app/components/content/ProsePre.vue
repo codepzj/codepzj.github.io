@@ -64,7 +64,13 @@ onMounted(async () => {
 </script>
 
 <template>
+<Mermaid
+	v-if="language === 'mermaid'"
+	:code
+	:filename
+/>
 <figure
+	v-else
 	class="z-codeblock"
 	:class="{ collapsed: collapsible && isCollapsed, collapsible }"
 	:style="{
