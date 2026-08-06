@@ -1,0 +1,618 @@
+<!DOCTYPE html><html  lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Go 反射机制详解 | 浩瀚星河</title><link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin><link rel="stylesheet" href="https://cdnjs.snrat.com/ajax/libs/KaTeX/0.16.44/katex.min.css" media="print" onload="this.media=&quot;all&quot;"><link rel="stylesheet" href="https://rsms.me/inter/inter.css" media="print" onload="this.media=&quot;all&quot;"><link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Serif+SC:wght@200..900&display=swap" media="print" onload="this.media=&quot;all&quot;"><link rel="stylesheet" href="https://fonts.bytedance.com/dfd/api/v1/css?family=DOUYINSANSBOLD-GB&display=swap" media="print" onload="this.media=&quot;all&quot;"><style>#blog-root{display:flex;justify-content:center;gap:1rem;min-width:0}#blog-aside,#blog-sidebar{flex:0 0 280px;position:sticky;top:0;height:100vh;height:100dvh;min-width:0;scrollbar-width:thin}@media(max-width:1080px){#blog-aside,#blog-sidebar{flex-shrink:.2}}#content{display:flex;gap:1rem;width:1080px;min-width:0}#content>#main-content{flex-grow:1;min-width:0}</style><style>.skip-link[data-v-bce074b1]{position:fixed;top:-100%;width:80%;margin:1rem;padding:.5rem;text-align:center;z-index:calc(infinity)}.skip-link[data-v-bce074b1]:focus{top:auto}</style><style>@charset "UTF-8";#blog-sidebar[data-v-c8ecc61d]{display:flex;flex-direction:column;color:var(--c-text-2)}#blog-sidebar[data-v-c8ecc61d]:hover{color:currentcolor}@media(max-width:768px){#blog-sidebar[data-v-c8ecc61d]{position:fixed;inset-inline-start:0;width:320px;max-width:100%;background-color:var(--ld-bg-blur);-webkit-backdrop-filter:blur(.5rem);backdrop-filter:blur(.5rem);color:currentcolor;transform:var(--transform-start-far);transition:transform .2s;z-index:var(--z-index-popover)}#blog-sidebar.show[data-v-c8ecc61d]{box-shadow:var(--box-shadow-1),var(--box-shadow-3);transform:none}}.sidebar-nav[data-v-c8ecc61d]{flex-grow:1;padding:0 5%;font-size:.9em}.sidebar-nav h3[data-v-c8ecc61d]{margin:2em 0 1em 1em;font:inherit;color:var(--c-text-2)}.sidebar-nav li[data-v-c8ecc61d]{margin:.5em 0}.sidebar-nav-item[data-v-c8ecc61d]{display:flex;align-items:center;gap:.5em;padding:.5em 1em;border-radius:.5em;transition:all .2s}.sidebar-nav-item.router-link-active[data-v-c8ecc61d],.sidebar-nav-item[data-v-c8ecc61d]:hover{background-color:var(--c-bg-soft);color:var(--c-text)}.sidebar-nav-item.router-link-active[data-v-c8ecc61d]:after{content:"⦁";width:1em;text-align:center;color:var(--c-text-3)}.sidebar-nav-item>.iconify[data-v-c8ecc61d]{font-size:1.5em}.sidebar-nav-item>.nav-text[data-v-c8ecc61d]{flex-grow:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.sidebar-nav-item>.external-tip[data-v-c8ecc61d]{opacity:.5;font-size:1em}.search-btn[data-v-c8ecc61d]{opacity:.5;margin:1rem 0;outline:2px solid var(--c-border);outline-offset:-2px;cursor:text;-webkit-user-select:none;-moz-user-select:none;user-select:none}.search-btn[data-v-c8ecc61d]:hover{opacity:1;outline-color:transparent;background-color:transparent}.sidebar-footer[data-v-c8ecc61d]{--gap:clamp(.5rem,3vh,1rem);display:grid;gap:var(--gap);padding:var(--gap);font-size:.8em;text-align:center;color:var(--c-text-2)}</style><style>.bg-mask[data-v-e653dc26]{position:fixed;inset:0;background-color:#0003;-webkit-backdrop-filter:var(--bdfilter);backdrop-filter:var(--bdfilter);z-index:var(--z-index-popover)}.v-enter-from[data-v-e653dc26],.v-leave-to[data-v-e653dc26]{opacity:0}.v-enter-active[data-v-e653dc26],.v-leave-active[data-v-e653dc26]{transition:all var(--delay)}</style><style>.blog-header[data-v-6d7a15c2]{contain:layout;display:flex;align-items:center;gap:.5em;position:relative;margin:clamp(1rem,2rem,5vh) 1rem min(1rem,5vh);line-height:1.4;color:var(--c-text);-webkit-user-select:none;-moz-user-select:none;user-select:none}.blog-logo[data-v-6d7a15c2]{height:3em}.blog-logo.circle[data-v-6d7a15c2]{width:3em;border-radius:50%;box-shadow:var(--box-shadow-1),var(--box-shadow-3)}@font-face{font-family:AlimamaFangYuanTi;src:url(/fonts/AlimamaFangYuanTi.woff2)}.header-title[data-v-6d7a15c2]{font-family:AlimamaFangYuanTi,Noto Sans SC,sans-serif;font-size:1.5em;font-synthesis:none;font-variation-settings:"wght" 600,"BEVL" 100}.header-title>.split-char[data-v-6d7a15c2]{animation:vf-weight-6d7a15c2 3.14s infinite alternate,vf-bevel-6d7a15c2 2.72s infinite alternate;animation-delay:var(--delay);animation-play-state:paused}.header-subtitle[data-v-6d7a15c2]{opacity:.5;font-size:.8em}@keyframes vf-weight-6d7a15c2{0%{font-weight:600}38.2%{font-weight:300}to{font-weight:900}}@keyframes vf-bevel-6d7a15c2{0%{font-variation-settings:"BEVL" 100}to{font-variation-settings:"BEVL" 1}}.emoji-tail[data-v-6d7a15c2]{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));align-content:center;justify-items:center;position:absolute;opacity:.2;inset:0;font-size:4rem;transition:opacity 1s;filter:blur(2px);pointer-events:none;z-index:-2}.emoji-tail>.split-char[data-v-6d7a15c2]{animation:emoji-floating-6d7a15c2 5s infinite alternate;animation-delay:var(--delay);animation-play-state:paused}.blog-header:hover .emoji-tail[data-v-6d7a15c2]{opacity:.5}.blog-header:hover .split-char[data-v-6d7a15c2]{animation-play-state:running}@keyframes emoji-floating-6d7a15c2{50%{transform:translate(-12px,-4px) scale(1.2);filter:blur(4px)}to{transform:translate(-4px,-12px) scale(.9);filter:blur(1px)}}</style><style>kbd[data-v-4496d88e]{display:inline-block;margin:.1em;padding:0 .2em .1em;border-radius:.2em;box-shadow:inset 0 -.15em 0 var(--c-bg-soft);background-color:var(--c-bg-soft);font-family:var(--font-basic);font-size:.9em;line-height:1.4;color:var(--c-text-2);transition:all .1s;-webkit-user-select:none;-moz-user-select:none;user-select:none}kbd.active[data-v-4496d88e],kbd[data-v-4496d88e]:active{box-shadow:inset 0 -.1em 0 var(--c-primary);background-color:var(--c-primary-soft);color:var(--c-primary);transform:translateY(.05em)}</style><style>.theme-toggle[data-v-510d9a06]{display:flex;gap:3px;width:-moz-fit-content;width:fit-content;margin:0 auto;padding:2px;border:1px solid var(--c-border);border-radius:1rem;background-color:var(--c-bg-2)}.theme-toggle>button[data-v-510d9a06]{padding:4px 1rem;border-radius:1rem;transition:all .1s}.theme-toggle>button[data-v-510d9a06]:hover{background-color:var(--c-bg-soft);color:var(--c-text-1)}.theme-toggle>button.active[data-v-510d9a06]{box-shadow:var(--box-shadow-2);background-color:var(--ld-bg-card);color:var(--c-text-1);cursor:auto}</style><style>menu[data-v-b08d7cdc]{display:flex;justify-content:center}menu a[data-v-b08d7cdc]{padding:.5em;border-radius:2em;transition:background-color .2s}menu a[data-v-b08d7cdc]:hover{background-color:var(--c-bg-soft)}menu a .iconify[data-v-b08d7cdc]{display:block}</style><style>.post-header[data-v-e2995caf]{contain:paint;display:flex;flex-direction:column;justify-content:space-between;gap:1rem;margin:.5rem;border-radius:1rem;background-color:var(--c-bg-2);color:var(--c-text)}@media(max-width:768px){.post-header[data-v-e2995caf]{margin:0;border-radius:0}}.post-header:focus-within .operations[data-v-e2995caf],.post-header:hover .operations[data-v-e2995caf]{opacity:1}.post-header.has-cover[data-v-e2995caf]{min-height:16rem;max-height:20rem;color:#fff;transition:font-size .2s}.post-header.has-cover .post-info[data-v-e2995caf]{filter:drop-shadow(0 1px 2px #000)}.post-header.has-cover .post-title[data-v-e2995caf]{background-image:linear-gradient(transparent,#0003,#0005);text-shadow:var(--text-shadow-black)}.post-header.has-cover .post-title.text-story[data-v-e2995caf]{text-align:center}.operations[data-v-e2995caf]{position:absolute;opacity:0;inset-inline-end:1em;color:var(--c-text-1);transition:opacity .2s;z-index:1}.post-cover[data-v-e2995caf]{position:absolute;inset:0}.post-cover[data-v-e2995caf]>img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}.post-title[data-v-e2995caf]{padding:.8em 1rem;font-size:1.6em;line-height:1.2;z-index:1}.post-nav[data-v-e2995caf]{padding:.8em 1rem;font-size:.8em}.post-nav .post-info[data-v-e2995caf]{display:flex;flex-wrap:wrap;gap:.5em 1.2em;-moz-column-gap:clamp(1em,3%,1.5em);column-gap:clamp(1em,3%,1.5em)}</style><style>.md-excerpt[data-v-7e121c65]{opacity:.6;margin:1rem .5rem;padding:.5rem;font-size:.9em;transition:opacity .2s}.md-excerpt>.static[data-v-7e121c65]{opacity:0;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.md-excerpt>.dynamic[data-v-7e121c65]{position:absolute;width:calc(100% - 1rem)}.md-excerpt .iconify[data-v-7e121c65]{margin-inline-end:.3em}.md-excerpt[data-v-7e121c65]:hover{opacity:1}</style><style>.post-footer[data-v-1cea170b]{margin:2rem .5rem;border:1px solid var(--c-border);border-radius:1rem;background-color:var(--c-bg-2)}section[data-v-1cea170b]{padding:1rem}section+section[data-v-1cea170b]{border-top:1px solid var(--c-border)}.title[data-v-1cea170b]{font-weight:700;color:var(--c-text)}.content[data-v-1cea170b]{margin-top:.5em;font-size:.9rem}.content li[data-v-1cea170b]{margin:.5em 0}</style><style>.surround-post[data-v-07dd1310]{contain:layout;display:flex;flex-wrap:wrap;gap:1rem;margin:3rem 1rem}.surround-link[data-v-07dd1310]{display:flex;align-items:center;gap:.5em;transition:color .2s}.surround-link[data-v-07dd1310]:not([href]){opacity:.4;-webkit-user-select:none;-moz-user-select:none;user-select:none}.surround-link[align-end][data-v-07dd1310]{flex-direction:row-reverse;margin-inline-start:auto;text-align:end}.surround-link>.surround-text[data-v-07dd1310]{text-wrap:balance;transition:transform .2s}.surround-link>.surround-text>.date[data-v-07dd1310]{display:block;opacity:.6;font-size:.8rem}.surround-link>.iconify[data-v-07dd1310]{opacity:.5;font-size:2rem;transition:transform .2s}.surround-link[href][data-v-07dd1310]:hover{color:var(--c-primary)}.surround-link[href]:hover>.surround-text[data-v-07dd1310]{transform:translate(-1em)}.surround-link[href]:hover[align-end]>.surround-text[data-v-07dd1310]{transform:translate(1em)}.surround-link[href]:hover>.iconify[data-v-07dd1310]{opacity:.2;transform:scale(2)}</style><style>.blog-footer[data-v-87318c93]{margin:3rem 1rem;font-size:.9em;color:var(--c-text-2)}.blog-footer .footer-nav[data-v-87318c93]{display:flex;flex-wrap:wrap;gap:5vw clamp(2rem,5%,5vw);padding-block:3rem}.blog-footer .footer-nav hgroup[data-v-87318c93]{margin:.5em}.blog-footer .footer-nav a[data-v-87318c93]{display:flex;align-items:center;gap:.3em;width:-moz-fit-content;width:fit-content;padding:.3em .5em;border-radius:.5em;font-size:.9em;transition:background-color .2s,color .1s}.blog-footer .footer-nav a[data-v-87318c93]:hover{background-color:var(--c-bg-soft);color:var(--c-text)}.blog-footer p[data-v-87318c93]{margin:.5em}</style><style>#blog-aside[data-v-181b8fb4]{display:flex;flex-direction:column;gap:1rem;overflow:auto;padding:.5rem;z-index:var(--z-index-popover)}@media(max-width:1080px){#blog-aside[data-v-181b8fb4]{position:fixed;inset-inline-end:0;top:0;width:320px;height:auto;max-width:100%;max-height:100%;transform:var(--transform-end-far);transition:transform .2s}#blog-aside[data-v-181b8fb4]>.blog-widget{padding:.5rem;border-radius:1rem;box-shadow:var(--box-shadow-1),var(--box-shadow-2);background-color:var(--ld-bg-blur);-webkit-backdrop-filter:blur(.5rem);backdrop-filter:blur(.5rem)}#blog-aside.show[data-v-181b8fb4]{transform:none}}#blog-aside[data-v-181b8fb4]:empty:not(.reserved){display:none}</style><style>#blog-panel[data-v-6e20fcbc]{contain:paint;position:fixed;inset-inline-end:min(1rem,5%);bottom:min(2rem,5%);border-radius:.5rem;background-color:var(--c-bg-a50);-webkit-backdrop-filter:blur(.5rem);backdrop-filter:blur(.5rem);font-size:1.4rem;transition:transform .1s;z-index:var(--z-index-popover)}@media(max-height:528px){#blog-panel[data-v-6e20fcbc]{display:flex}}#blog-panel.has-active[data-v-6e20fcbc]{box-shadow:var(--box-shadow-1),var(--box-shadow-3)}button[data-v-6e20fcbc]{display:block;padding:.5rem;transition:all .2s}button[data-v-6e20fcbc]:hover{background-color:var(--c-bg-a80);color:var(--c-primary)}button.active[data-v-6e20fcbc]{background-color:var(--ld-bg-active);color:var(--c-primary)}</style><style>.button[data-v-cd9f03ef]{display:inline-block;padding:.4em .6em;border:1px solid var(--c-bg-soft);border-radius:.5em;box-shadow:var(--box-shadow-1);background-color:var(--ld-bg-card);line-height:1.2;vertical-align:middle;transition:color .1s,background-color .2s;cursor:pointer}.button.primary[data-v-cd9f03ef]{background-color:var(--c-primary);color:var(--c-bg)}.button[data-v-cd9f03ef]:hover{box-shadow:var(--box-shadow-2);background-color:var(--c-bg-2);color:var(--c-text)}.button[data-v-cd9f03ef]:active{background-color:var(--ld-shadow)}.button[data-v-cd9f03ef]:disabled{background-color:var(--c-bg-1);color:var(--c-text-3);cursor:not-allowed}.button+.button[data-v-cd9f03ef]{margin-inline-start:.8em}.button-main[data-v-cd9f03ef]{display:flex;align-items:center;justify-content:center;gap:.2em}.button-desc[data-v-cd9f03ef]{font-size:.75em;text-align:center;color:var(--c-text-2)}</style><style>.z-link[href][data-v-84e39d9a]{margin:-.1em -.2em;padding:.1em .2em;background:linear-gradient(var(--c-primary-soft),var(--c-primary-soft)) no-repeat bottom/100% .1em;color:var(--c-primary);transition:all .2s}.z-link[href][data-v-84e39d9a]:hover{border-radius:.3em;background-size:100% 100%}.z-link[href] .domain-icon[data-v-84e39d9a]{margin-inline-end:.1em}</style><style>.toc[data-v-5e9b7b8e]{position:relative}.toc[data-v-5e9b7b8e]:before{content:"";position:absolute;inset:.3rem;width:3px;border-radius:1rem;background-color:var(--c-bg-soft)}ol[data-v-5e9b7b8e]{padding-inline-start:.8rem}li[data-v-5e9b7b8e]{opacity:.6;font-size:.94em;color:var(--c-text);transition:opacity .2s}li[data-v-5e9b7b8e]:hover{opacity:.94}li.active[data-v-5e9b7b8e],li.has-active[data-v-5e9b7b8e]{opacity:1;font-size:1em}li.active[data-v-5e9b7b8e]:before{content:"";position:absolute;inset-inline-start:.3rem;margin:.2rem 0;padding:.6rem 1.5px;border-radius:1rem;background-color:var(--c-primary)}li>a[data-v-5e9b7b8e]{display:block;overflow:hidden;padding:.2em .5em;border-radius:.5em;white-space:nowrap;text-overflow:ellipsis;transition:all .2s}li>a[data-v-5e9b7b8e]:hover{background-color:var(--c-bg-soft)}.no-toc[data-v-5e9b7b8e]{padding:1em;text-align:center;color:var(--c-text-3)}</style><style>.blog-widget[data-v-3ab42032]{flex-shrink:1;font-size:.9em}.blog-widget.shrink[data-v-3ab42032]{display:flex;flex-direction:column;overflow:auto}.blog-widget.grayscale[data-v-3ab42032]:where(.iconify,img){transition:filter .2s;filter:grayscale(.8)}#blog-aside.show .blog-widget.grayscale[data-v-3ab42032]:where(.iconify,img),#blog-aside:hover .blog-widget.grayscale[data-v-3ab42032]:where(.iconify,img),.blog-widget.grayscale[data-v-3ab42032]:where(.iconify,img):focus-within{filter:grayscale(0)}.blog-widget.dim[data-v-3ab42032]{opacity:.3;transition:opacity .2s}#blog-aside.show .blog-widget.dim[data-v-3ab42032],#blog-aside:hover .blog-widget.dim[data-v-3ab42032],.blog-widget.dim[data-v-3ab42032]:focus-within{opacity:1}.widget-header[data-v-3ab42032]{display:flex;align-items:center;gap:.5rem;padding:.5rem;color:var(--c-text-2)}.widget-header[data-v-3ab42032]:empty{display:none}.widget-header>.seperator[data-v-3ab42032]{flex-grow:1}.widget-header[data-v-3ab42032]>a{transition:color .2s}.widget-header[data-v-3ab42032]>a[href]:hover{color:var(--c-primary)}.widget-body[data-v-3ab42032]{overscroll-behavior:contain}.widget-body.with-bg[data-v-3ab42032]{contain:paint;z-index:0}.widget-body.with-bg>.bg-img[data-v-3ab42032]{position:absolute;opacity:.2;inset:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover;pointer-events:none;z-index:-1}.widget-body.with-bg>.bg-img.bg-right[data-v-3ab42032]{inset-inline-start:50%;width:50%;-webkit-mask-image:linear-gradient(to var(--end),transparent,#fff 50%);mask-image:linear-gradient(to var(--end),transparent,#fff 50%)}.widget-body.widget-card[data-v-3ab42032]{padding:.5rem .8rem;border-radius:.8rem;background-color:var(--c-bg-2)}.widget-body.widget-card[data-v-3ab42032] p{padding:.2em 0}</style><style>code[data-v-9b6ac311]{margin:.1em;padding:.1rem .3em;border:1px solid var(--c-border);border-radius:4px;background-color:var(--c-bg-2);font-size:.85em;white-space:break-spaces}code.copyable[data-v-9b6ac311]{padding-inline-end:.1em}@supports (color:color-mix(in srgb,transparent,transparent)){code[data-v-9b6ac311]{border-color:color-mix(in srgb,currentcolor 10%,transparent);background-color:color-mix(in srgb,currentcolor 5%,transparent)}}.copy-button[data-v-9b6ac311]{display:inline-flex;margin-inline-start:.2em;vertical-align:-.2em;color:var(--c-text-3);transition:color .2s}.copy-button[data-v-9b6ac311]:focus-visible,.copy-button[data-v-9b6ac311]:hover{opacity:1;color:var(--c-primary)}</style><style>@charset "UTF-8";.z-codeblock[data-v-7f42e922]{--line-height:1.4;contain:paint;margin:.5em 0;border-radius:.5em;background-color:var(--c-bg-2);font-size:.85em;line-height:1.4;-moz-tab-size:var(--tab-size,4);-o-tab-size:var(--tab-size,4);tab-size:var(--tab-size,4)}.z-codeblock.collapsible>pre[data-v-7f42e922]{padding-bottom:.5rem}.z-codeblock.collapsed>pre[data-v-7f42e922]{overflow:hidden;max-height:calc(var(--line-height)*var(--collapsed-rows)*1em + 1rem);-webkit-mask-image:linear-gradient(0deg,transparent -2em,#fff 4em);mask-image:linear-gradient(0deg,transparent -2em,#fff 4em);animation:none}figcaption[data-v-7f42e922]{display:flex;justify-content:space-between;gap:1em;position:sticky;top:0;padding:0 1em;z-index:2}figcaption>.filename[data-v-7f42e922]{padding:.2em .8em;border-radius:0 0 .5em .5em;background-color:var(--c-border);word-break:break-all}figcaption>.language[data-v-7f42e922]{opacity:.4;height:0;transform:translateY(.2em)}figcaption>.operations[data-v-7f42e922]{position:absolute;opacity:0;inset-inline-end:0;padding:0 .6em;border-end-start-radius:.5em;background-color:var(--c-bg-2);transition:opacity .2s}:focus-within>figcaption>.operations[data-v-7f42e922],:hover>figcaption>.operations[data-v-7f42e922]{opacity:1}figcaption>.operations>button[data-v-7f42e922]{opacity:.4;padding:.2em .4em;transition:opacity .2s}figcaption>.operations>button[data-v-7f42e922]:hover{opacity:1}pre[data-v-7f42e922]{--start-offset:4em;padding:1rem;padding-inline-start:var(--start-offset)}pre.wrap[data-v-7f42e922]{white-space:pre-wrap}[data-v-7f42e922] .line.diff{background-color:var(--ld-bg-active)}[data-v-7f42e922] .line.diff.add{--line-indicator:"+ ";--line-indicator-color:var(--c-success);--ld-bg-active:var(--c-success-soft)}[data-v-7f42e922] .line.diff.remove{--line-indicator:"- ";--line-indicator-color:var(--c-error);--ld-bg-active:var(--c-error-soft)}[data-v-7f42e922] .line.highlighted{--line-indicator-color:var(--c-text-1);background-color:var(--ld-bg-active)}[data-v-7f42e922] .line.highlighted.error{--line-indicator-color:var(--c-error);--ld-bg-active:var(--c-error-soft)}[data-v-7f42e922] .line.highlighted.warning{--line-indicator-color:var(--c-warning);--ld-bg-active:var(--c-warning-soft)}[data-v-7f42e922] .line.focused{--line-indicator:"→ ";--line-indicator-color:var(--c-text-1);display:inline-block;position:relative;box-shadow:0 0 10rem 4rem var(--c-bg-2);transition:box-shadow .2s}@supports (color:color-mix(in srgb,transparent,transparent)){[data-v-7f42e922] .line.focused{box-shadow:0 0 0 100vmax color-mix(in srgb,transparent,var(--c-bg-2))}}pre[data-v-7f42e922]:hover>.line.focused{box-shadow:none}[data-v-7f42e922] .line:before{content:var(--line-indicator,"") attr(data-line);position:fixed;inset-inline-start:0;width:var(--start-offset);padding-inline-end:1em;background-color:var(--c-bg-2);text-align:end;color:var(--line-indicator-color,var(--c-text-3));z-index:1}[data-v-7f42e922] .line>.highlighted-word{border-radius:.2em;box-shadow:inset 0 0 0 1em var(--ld-bg-active)}.toggle-btn[data-v-7f42e922]{display:block;position:relative;opacity:.3;width:100%;padding:.2em;background-color:var(--c-bg-3);transition:opacity .2s}.toggle-btn[data-v-7f42e922]:hover{opacity:1}.toggle-icon[data-v-7f42e922]{margin-inline-end:.2em;transition:all .2s}.toggle-icon.is-collapsed[data-v-7f42e922]{transform:rotate(180deg)}</style><style>.md-table[data-v-adb68e13]{position:relative;margin:1rem 0;font-variant-numeric:tabular-nums;font-size:.9em;line-height:1.4;word-break:break-all}.md-table table.scroll[data-v-adb68e13]{contain:layout;display:block;white-space:nowrap;word-break:normal}[data-v-adb68e13] table{max-height:80vh;max-height:80dvh;margin:auto;border-collapse:collapse}[data-v-adb68e13] table>thead{position:sticky;top:0}[data-v-adb68e13] table th{background-color:var(--c-bg-2);font-weight:700;text-align:center}[data-v-adb68e13] table tr{transition:background-color .2s}[data-v-adb68e13] table tr:hover{background-color:var(--c-bg-2)}[data-v-adb68e13] table td,[data-v-adb68e13] table th{padding:.5em .8em;border:1px solid var(--c-border)}</style><link rel="stylesheet" href="/_nuxt/entry.Cy95giYe.css" crossorigin><link rel="stylesheet" href="/_nuxt/Comment.Dtg58HiE.css" crossorigin><style>:where(.i-ri\:creative-commons-line){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='black' d='M9 8c1.104 0 2.105.448 2.829 1.173l-1.414 1.413a2 2 0 1 0 0 2.828l1.413 1.414A4.001 4.001 0 0 1 5 12c0-2.208 1.792-4 4-4m9.829 1.173A4.001 4.001 0 0 0 12 12a4.001 4.001 0 0 0 6.828 2.828l-1.414-1.414a2 2 0 1 1 0-2.828zM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12m10-8a8 8 0 1 0 0 16a8 8 0 0 0 0-16'/%3E%3C/svg%3E")}:where(.i-simple-icons\:go){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='black' d='M1.811 10.231c-.047 0-.058-.023-.035-.059l.246-.315c.023-.035.081-.058.128-.058h4.172c.046 0 .058.035.035.07l-.199.303c-.023.036-.082.07-.117.07zM.047 11.306c-.047 0-.059-.023-.035-.058l.245-.316c.023-.035.082-.058.129-.058h5.328c.047 0 .07.035.058.07l-.093.28c-.012.047-.058.07-.105.07zm2.828 1.075c-.047 0-.059-.035-.035-.07l.163-.292c.023-.035.07-.07.117-.07h2.337c.047 0 .07.035.07.082l-.023.28c0 .047-.047.082-.082.082zm12.129-2.36c-.736.187-1.239.327-1.963.514c-.176.046-.187.058-.34-.117c-.174-.199-.303-.327-.548-.444c-.737-.362-1.45-.257-2.115.175c-.795.514-1.204 1.274-1.192 2.22c.011.935.654 1.706 1.577 1.835c.795.105 1.46-.175 1.987-.77c.105-.13.198-.27.315-.434H10.47c-.245 0-.304-.152-.222-.35c.152-.362.432-.97.596-1.274a.32.32 0 0 1 .292-.187h4.253c-.023.316-.023.631-.07.947a5 5 0 0 1-.958 2.29c-.841 1.11-1.94 1.8-3.33 1.986c-1.145.152-2.209-.07-3.143-.77c-.865-.655-1.356-1.52-1.484-2.595c-.152-1.274.222-2.419.993-3.424c.83-1.086 1.928-1.776 3.272-2.02c1.098-.2 2.15-.07 3.096.571c.62.41 1.063.97 1.356 1.648c.07.105.023.164-.117.2m3.868 6.461c-1.064-.024-2.034-.328-2.852-1.029a3.67 3.67 0 0 1-1.262-2.255c-.21-1.32.152-2.489.947-3.529c.853-1.122 1.881-1.706 3.272-1.95c1.192-.21 2.314-.095 3.33.595c.923.63 1.496 1.484 1.648 2.605c.198 1.578-.257 2.863-1.344 3.962c-.771.783-1.718 1.273-2.805 1.495c-.315.06-.63.07-.934.106m2.78-4.72c-.011-.153-.011-.27-.034-.387c-.21-1.157-1.274-1.81-2.384-1.554c-1.087.245-1.788.935-2.045 2.033c-.21.912.234 1.835 1.075 2.21c.643.28 1.285.244 1.905-.07c.923-.48 1.425-1.228 1.484-2.233z'/%3E%3C/svg%3E")}:where(.i-tabler\:align-right){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16m-10 6h10M6 18h14'/%3E%3C/svg%3E")}:where(.i-tabler\:archive){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2m2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8m-9 4h4'/%3E%3C/svg%3E")}:where(.i-tabler\:arrow-bar-to-up){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 10v10m0-10l4 4m-4-4l-4 4M4 4h16'/%3E%3C/svg%3E")}:where(.i-tabler\:brand-github){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2c2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2a4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6c-.6.6-.6 1.2-.5 2V21'/%3E%3C/svg%3E")}:where(.i-tabler\:check){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m5 12l5 5L20 7'/%3E%3C/svg%3E")}:where(.i-tabler\:chevrons-up){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m7 11l5-5l5 5M7 17l5-5l5 5'/%3E%3C/svg%3E")}:where(.i-tabler\:components){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m3 12l3 3l3-3l-3-3zm12 0l3 3l3-3l-3-3zM9 6l3 3l3-3l-3-3zm0 12l3 3l3-3l-3-3z'/%3E%3C/svg%3E")}:where(.i-tabler\:device-desktop){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zm4 15h10m-8-4v4m6-4v4'/%3E%3C/svg%3E")}:where(.i-tabler\:files){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3Cpath d='M15 3v4a1 1 0 0 0 1 1h4'/%3E%3Cpath d='M18 17h-7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4l5 5v7a2 2 0 0 1-2 2'/%3E%3Cpath d='M16 17v2a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2'/%3E%3C/g%3E%3C/svg%3E")}:where(.i-tabler\:home){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3Cpath d='M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6'/%3E%3C/g%3E%3C/svg%3E")}:where(.i-tabler\:layout-sidebar){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm5-2v16'/%3E%3C/svg%3E")}:where(.i-tabler\:layout-sidebar-filled){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='black' d='M6 21a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3zM18 5h-8v14h8a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1'/%3E%3C/svg%3E")}:where(.i-tabler\:link){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m9 15l6-6m-4-3l.463-.536a5 5 0 0 1 7.071 7.072L18 13m-5 5l-.397.534a5.07 5.07 0 0 1-7.127 0a4.97 4.97 0 0 1 0-7.071L6 11'/%3E%3C/svg%3E")}:where(.i-tabler\:message-dots){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 11v.01M8 11v.01m8-.01v.01M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3h-5l-5 3v-3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3z'/%3E%3C/svg%3E")}:where(.i-tabler\:moon){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z'/%3E%3C/svg%3E")}:where(.i-tabler\:pencil-minus){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 20h4L18.5 9.5a2.828 2.828 0 1 0-4-4L4 16zm9.5-13.5l4 4M16 19h6'/%3E%3C/svg%3E")}:where(.i-tabler\:pilcrow){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13 4v16m4-16v16m2-16H9.5a4.5 4.5 0 0 0 0 9H13'/%3E%3C/svg%3E")}:where(.i-tabler\:rss){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 19a1 1 0 1 0 2 0a1 1 0 1 0-2 0M4 4a16 16 0 0 1 16 16M4 11a9 9 0 0 1 9 9'/%3E%3C/svg%3E")}:where(.i-tabler\:search){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6'/%3E%3C/svg%3E")}:where(.i-tabler\:share){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0m12-6a3 3 0 1 0 6 0a3 3 0 1 0-6 0m0 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0m-6.3-7.3l6.6-3.4m-6.6 6l6.6 3.4'/%3E%3C/svg%3E")}:where(.i-tabler\:sparkles-2){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M14 6a9.3 9.3 0 0 0 1.516-.546c.911-.438 1.494-1.015 1.937-1.932c.207-.428.382-.928.547-1.522c.165.595.34 1.095.547 1.521c.443.918 1.026 1.495 1.937 1.933c.426.205.925.38 1.516.546a9.3 9.3 0 0 0-1.516.547c-.911.438-1.494 1.015-1.937 1.932A9 9 0 0 0 18 10c-.165-.594-.34-1.095-.547-1.521c-.443-.918-1.026-1.494-1.937-1.932A9 9 0 0 0 14 6M3 14a21 21 0 0 0 1.652-.532c2.542-.953 3.853-2.238 4.816-4.806A20 20 0 0 0 10 7a20 20 0 0 0 .532 1.662c.963 2.567 2.275 3.853 4.816 4.806q.75.28 1.652.532a21 21 0 0 0-1.652.532c-2.542.953-3.854 2.238-4.816 4.806A20 20 0 0 0 10 21a20 20 0 0 0-.532-1.662c-.963-2.568-2.275-3.853-4.816-4.806A21 21 0 0 0 3 14'/%3E%3C/svg%3E")}:where(.i-tabler\:sun){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 12a4 4 0 1 0 8 0a4 4 0 1 0-8 0m-5 0h1m8-9v1m8 8h1m-9 8v1M5.6 5.6l.7.7m12.1-.7l-.7.7m0 11.4l.7.7m-12.1-.7l-.7.7'/%3E%3C/svg%3E")}:where(.i-tabler\:text-wrap){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 18h5m-5-6h13a3 3 0 0 1 0 6h-4l2-2m0 4l-2-2'/%3E%3C/svg%3E")}:where(.i-tabler\:text-wrap-disabled){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h10M4 18h10M4 12h17l-3-3m0 6l3-3'/%3E%3C/svg%3E")}:where(.i-zi\:solar-rewind-back-bold-duotone){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='black' fill-rule='evenodd' d='M22 6.426v11.148c0 1.847-1.6 3.015-2.903 2.118L13 15.232V8.768l6.097-4.46C20.399 3.411 22 4.58 22 6.426' clip-rule='evenodd' opacity='.5'/%3E%3Cpath fill='black' d='M13 7.123v9.754c0 1.616-1.467 2.638-2.661 1.853L2.92 13.853c-1.228-.807-1.228-2.899 0-3.706l7.42-4.877c1.193-.785 2.66.237 2.66 1.853'/%3E%3C/svg%3E")}:where(.i-zi\:solar-rewind-forward-bold-duotone){display:inline-block;width:1em;height:1em;background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%;--svg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='black' fill-rule='evenodd' d='M2 6.426v11.148c0 1.847 1.6 3.015 2.903 2.118L11 15.232V8.768l-6.097-4.46C3.601 3.411 2 4.58 2 6.426' clip-rule='evenodd' opacity='.5'/%3E%3Cpath fill='black' d='M11 7.123v9.754c0 1.616 1.467 2.638 2.661 1.853l7.418-4.877c1.228-.807 1.228-2.899 0-3.706L13.66 5.27C12.467 4.485 11 5.507 11 7.123'/%3E%3C/svg%3E")}</style><link rel="preload" as="fetch" crossorigin="anonymous" href="/2025/08/go-reflect/_payload.json?205b64c9-3f3c-4ad5-b936-446935a16891"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DYW-sWa7.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/CtF9W_6a.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/CoK0Lpj-.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/D-zlVVgS.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/Db28DNAS.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DhdNCeVt.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/CJZS-VX1.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/_fC4h5JQ.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/D0CR25bc.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/B-sj09kA.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DImAMQfd.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DTURnLqd.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DcvrKjp6.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/CK5gOxmq.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BP0__6J2.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DzMPwImM.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/C40bX6nM.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/stJsKGIn.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BiazW96o.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/9m5AhsOh.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DiuR3JsK.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/rLE_npyf.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BXoYwzk_.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/OWdjiDfn.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/D_EYzy3D.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DJ5rcS6y.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DR0k4gvZ.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/CEzBrJLu.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/CpqDGX-M.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DX-062lZ.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/PD0G2Rv-.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/tf6Y9Asv.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/P7JaU9B8.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/C-lrBOh0.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BlVpZoXL.js"><script type="module" src="/_nuxt/DYW-sWa7.js" crossorigin></script><link rel="icon" href="/favicon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"><meta name="author" content="浩瀚星河"><meta name="color-scheme" content="light dark"><meta name="generator" content="Clarity 3.7.1" data-github-repo="https://github.com/codepzj/codepzj.github.io"><meta name="mobile-web-app-capable" content="yes"><meta property="og:type" content="article"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="description" content="反射是程序在运行时动态访问、检测和修改自身状态的能力，通过反射可以获取类型信息、调用方法或修改字段值。在Go语言中，反射由reflect包实现，核心是reflect.Type（类型接口）和reflect.Value（值结构体），分别对应接口的类型和值部分。反射常用于序列化、ORM框架等场景，但存在性能开销大、代码可读性差、破坏封装性等缺点。优化方法包括缓存反射结果、减少高频调用或使用替代方案（如泛型）。反射适合框架开发等动态需求场景，但业务代码中应谨慎使用"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" data-infer="" content="Go 反射机制详解 | 浩瀚星河"><meta property="og:description" data-infer="" content="反射是程序在运行时动态访问、检测和修改自身状态的能力，通过反射可以获取类型信息、调用方法或修改字段值。在Go语言中，反射由reflect包实现，核心是reflect.Type（类型接口）和reflect.Value（值结构体），分别对应接口的类型和值部分。反射常用于序列化、ORM框架等场景，但存在性能开销大、代码可读性差、破坏封装性等缺点。优化方法包括缓存反射结果、减少高频调用或使用替代方案（如泛型）。反射适合框架开发等动态需求场景，但业务代码中应谨慎使用"><link rel="canonical" href="https://codepzj.github.io/2025/08/go-reflect"><meta property="og:locale" content="zh_CN"><meta property="og:url" content="https://codepzj.github.io/2025/08/go-reflect"><meta property="og:site_name" content="浩瀚星河"><script id="unhead:payload" type="application/json">{"templateParams":{"separator":"|"},"titleTemplate":"%s %separator 浩瀚星河"}</script><script>"use strict";(()=>{const o=window,e=document.documentElement,c=["dark","light"],s=getStorageValue("localStorage","nuxt-color-mode")||"system";let r=s==="system"?f():s;const l=e.getAttribute("data-color-mode-forced");l&&(r=l),i(r),o["__NUXT_COLOR_MODE__"]={preference:s,value:r,getColorScheme:f,addColorScheme:i,removeColorScheme:d};function i(t){const a=""+t+"",n="";e.classList?e.classList.add(a):e.className+=" "+a,n&&e.setAttribute("data-"+n,t)}function d(t){const a=""+t+"",n="";e.classList?e.classList.remove(a):e.className=e.className.replace(new RegExp(a,"g"),""),n&&e.removeAttribute("data-"+n)}function u(t){return o.matchMedia("(prefers-color-scheme"+t+")")}function f(){if(o.matchMedia&&u("").media!=="not all"){for(const t of c)if(u(":"+t).matches)return t}return"light"}})();function getStorageValue(o,e){switch(o){case"localStorage":try{return window.localStorage.getItem(e)}catch{return null}case"sessionStorage":try{return window.sessionStorage.getItem(e)}catch{return null}case"cookie":try{return getCookie(e)}catch{return null}default:return null}}function getCookie(o){const c=("; "+window.document.cookie).split("; "+o+"=");if(c.length===2){const s=c.pop();return s?s.split(";").shift():null}}</script></head><body><div id="blog-root"><!--[--><div class="nuxt-loading-indicator" style="position:fixed;top:0;right:0;left:0;pointer-events:none;width:auto;height:3px;opacity:0;background:repeating-linear-gradient(to right,#00dc82 0%,#34cdfe 50%,#0047e1 100%);background-size:0% auto;transform:scaleX(0%);transform-origin:left;transition:transform 0.1s, height 0.4s, opacity 0.4s;z-index:999999;"></div><div style="position:absolute;"></div><a href="#main-content" class="skip-link gradient-card active" data-v-bce074b1> 跳转到主要内容 / Skip to content </a><!--[--><!----><aside id="blog-sidebar" class="" data-v-c8ecc61d><a href="/" class="blog-header sidebar-header" data-v-c8ecc61d data-v-6d7a15c2><!--[--><div class="emoji-tail" data-v-6d7a15c2><!--[--><span class="split-char" style="--delay:-3.00s;" data-v-6d7a15c2>✨</span><span class="split-char" style="--delay:-2.40s;" data-v-6d7a15c2>🌌</span><span class="split-char" style="--delay:-1.80s;" data-v-6d7a15c2>💻</span><span class="split-char" style="--delay:-1.20s;" data-v-6d7a15c2>🚀</span><!--]--></div><img data-nuxt-img srcset="https://codepzj.github.io/avatar.jpg 1x, https://codepzj.github.io/avatar.jpg 1.5x, https://codepzj.github.io/avatar.jpg 2x" onerror="this.setAttribute(&#39;data-error&#39;, 1)" class="blog-logo round-cobblestone circle" alt="浩瀚星河" src="https://codepzj.github.io/avatar.jpg" data-v-6d7a15c2><div class="blog-text" data-v-6d7a15c2><div class="header-title" data-v-6d7a15c2><!--[--><span class="split-char" style="--delay:0.10s;" data-v-6d7a15c2>浩</span><span class="split-char" style="--delay:0.20s;" data-v-6d7a15c2>瀚</span><span class="split-char" style="--delay:0.30s;" data-v-6d7a15c2>星</span><span class="split-char" style="--delay:0.40s;" data-v-6d7a15c2>河</span><!--]--></div><div class="header-subtitle" data-v-6d7a15c2>记录 Golang 学习与开发实践</div></div><!--]--></a><nav class="sidebar-nav scrollcheck-y" data-v-c8ecc61d><div class="search-btn sidebar-nav-item gradient-card" data-v-c8ecc61d><span class="iconify i-tabler:search" aria-hidden="true" style="" data-v-c8ecc61d></span><span class="nav-text" data-v-c8ecc61d>搜索</span><!--[--><!--[--><kbd class="" data-v-4496d88e><!--[-->Ctrl+K<!--]--></kbd><!--]--><!--]--></div><!--[--><!--[--><!----><menu data-v-c8ecc61d><!--[--><li data-v-c8ecc61d><a href="/" class="sidebar-nav-item" data-v-c8ecc61d><!--[--><span class="iconify i-tabler:files" aria-hidden="true" style="" data-v-c8ecc61d></span><span class="nav-text" data-v-c8ecc61d>文章</span><!----><!--]--></a></li><li data-v-c8ecc61d><a href="/link" class="sidebar-nav-item" data-v-c8ecc61d><!--[--><span class="iconify i-tabler:link" aria-hidden="true" style="" data-v-c8ecc61d></span><span class="nav-text" data-v-c8ecc61d>友链</span><!----><!--]--></a></li><li data-v-c8ecc61d><a href="/archive" class="sidebar-nav-item" data-v-c8ecc61d><!--[--><span class="iconify i-tabler:archive" aria-hidden="true" style="" data-v-c8ecc61d></span><span class="nav-text" data-v-c8ecc61d>归档</span><!----><!--]--></a></li><!--]--></menu><!--]--><!--]--></nav><footer class="sidebar-footer" data-v-c8ecc61d><div class="theme-toggle" data-v-c8ecc61d data-v-510d9a06><!--[--><button aria-label="浅色模式" class="" data-v-510d9a06><span class="iconify i-tabler:sun" aria-hidden="true" style="" data-v-510d9a06></span></button><button aria-label="跟随系统" class="active" data-v-510d9a06><span class="iconify i-tabler:device-desktop" aria-hidden="true" style="" data-v-510d9a06></span></button><button aria-label="深色模式" class="" data-v-510d9a06><span class="iconify i-tabler:moon" aria-hidden="true" style="" data-v-510d9a06></span></button><!--]--></div><menu data-v-c8ecc61d data-v-b08d7cdc><!--[--><a href="https://codepzj.github.io" rel="noopener noreferrer" target="_blank" aria-label="个人主页" data-v-b08d7cdc><!--[--><span class="iconify i-tabler:home" aria-hidden="true" style="" data-v-b08d7cdc></span><!--]--></a><a href="https://github.com/codepzj" rel="noopener noreferrer" target="_blank" aria-label="GitHub: codepzj" data-v-b08d7cdc><!--[--><span class="iconify i-tabler:brand-github" aria-hidden="true" style="" data-v-b08d7cdc></span><!--]--></a><a href="/atom.xml" rel="noopener noreferrer" target="_blank" aria-label="Atom订阅" data-v-b08d7cdc><!--[--><span class="iconify i-tabler:rss" aria-hidden="true" style="" data-v-b08d7cdc></span><!--]--></a><!--]--></menu></footer></aside><!--]--><div id="content"><main id="main-content"><!--[--><!--[--><!--[--><div class="post-header" data-v-e2995caf><!----><div class="post-nav" data-v-e2995caf><div class="operations" data-v-e2995caf><span class="iconify i-tabler:check" aria-hidden="true" style="display:none;" data-v-e2995caf></span><button class="button" data-v-e2995caf data-v-cd9f03ef><div class="button-main" data-v-cd9f03ef><span class="iconify i-tabler:share" aria-hidden="true" style="" data-v-cd9f03ef></span><!--[-->文字分享<!--]--></div><!----></button></div><div class="post-info" data-v-e2995caf><span title="2025-08-21" data-v-e2995caf><span class="iconify i-tabler:pencil-minus" aria-hidden="true" style=""></span><!--[--> <!--]--><time data-year="2-digit" data-month="long" data-day="numeric" data-numeric="auto" data-relative="false" data-title="false" datetime="2025-08-20T16:00:00.000Z" data-prehydrate-id=":z0yH6SRwXn:">August 20, 25</time></span><!----><span data-v-e2995caf><span class="iconify i-simple-icons:go" aria-hidden="true" style="" data-v-e2995caf></span> Go语言</span><span data-v-e2995caf><span class="iconify i-tabler:pilcrow" aria-hidden="true" style="" data-v-e2995caf></span> 4834 字 </span></div></div><h1 class="text-tech post-title" data-v-e2995caf>Go 反射机制详解</h1></div><div class="md-excerpt gradient-card" data-v-7e121c65><span class="dynamic" data-v-7e121c65><span class="iconify i-tabler:sparkles-2" aria-hidden="true" style="" data-v-7e121c65></span></span><span class="static" data-v-7e121c65><span class="iconify i-tabler:sparkles-2" aria-hidden="true" style="" data-v-7e121c65></span>反射是程序在运行时动态访问、检测和修改自身状态的能力，通过反射可以获取类型信息、调用方法或修改字段值。在Go语言中，反射由reflect包实现，核心是reflect.Type（类型接口）和reflect.Value（值结构体），分别对应接口的类型和值部分。反射常用于序列化、ORM框架等场景，但存在性能开销大、代码可读性差、破坏封装性等缺点。优化方法包括缓存反射结果、减少高频调用或使用替代方案（如泛型）。反射适合框架开发等动态需求场景，但业务代码中应谨慎使用</span></div><article class="article md-tech"><h2 id="什么是反射"><a href="#什么是反射"><!--[-->什么是反射<!--]--></a></h2><p><!--[-->反射可以认为是程序在运行时的一种能力，反射可以在程序运行时访问、检测和修改它本身状态，比如在程序运行时可以检查变量的类型和值，调用它们的方法，甚至修改它们的值。使用反射可以增加程序的灵活性，简单来说，反射就是程序在运行时能够检测自身和修改自身的一种能力。<!--]--></p><h2 id="go-语言反射"><a href="#go-语言反射"><!--[-->Go 语言反射<!--]--></a></h2><p><!--[-->对于很多的高级语言都实现了反射，像 Java，Python。在 Go 语言中，反射在 Go 语言内置的<code class="" data-v-9b6ac311><!--[-->reflect<!--]--><!----><!----></code>包下实现。Go 语言中的反射建立在 Go 的类型系统之上，并且与接口密切相关。通过前面的学习我们知道 Go 语言的空接口包含类型(<code class="" data-v-9b6ac311><!--[-->Type<!--]--><!----><!----></code>)和值(<code class="" data-v-9b6ac311><!--[-->Value<!--]--><!----><!----></code>)两个部分，在反射里，也要用到类型(<code class="" data-v-9b6ac311><!--[-->Type<!--]--><!----><!----></code>)和值(<code class="" data-v-9b6ac311><!--[-->Value<!--]--><!----><!----></code>)。
+<code class="" data-v-9b6ac311><!--[-->reflect<!--]--><!----><!----></code>包中定义了<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>和<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>，正好对应我们前面所说的<code class="" data-v-9b6ac311><!--[-->Type<!--]--><!----><!----></code>和<code class="" data-v-9b6ac311><!--[-->Value<!--]--><!----><!----></code>。要注意的是<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>是一个接口而<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>是一个具体的结构体。在<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>接口中定义了很多跟类型相关的方法，而<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>则是绑定了很多跟值相关的方法。<!--]--></p><h3 id="reflecttypeof"><a href="#reflecttypeof"><!--[-->reflect.TypeOf()<!--]--></a></h3><p><!--[-->由于<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>是一个接口，所以只有当某个类型实现了这个接口，我们才能获取到它的类型，同时，在<code class="" data-v-9b6ac311><!--[-->reflect<!--]--><!----><!----></code>包内，类型描述符是未导出类型，所以我们只能通过<code class="" data-v-9b6ac311><!--[-->reflect.TypeOf()<!--]--><!----><!----></code>方法获取<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>类型的值。
+我们首先看一个例子，看下<code class="" data-v-9b6ac311><!--[-->reflect.TypeOf()<!--]--><!----><!----></code>的常用用法：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name string
+    Age  int
+}
+
+func main() {
+    var num int64 = 100
+    t1 := reflect.TypeOf(num)
+    fmt.Println(t1.String())
+
+    st := Student{
+       Name: &quot;zhangsan&quot;,
+       Age:  18,
+    }
+    t2 := reflect.TypeOf(st)
+    fmt.Println(t2.String())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>int64
+main.Student
+</pre><!----></figure><p><!--[-->可以看到对于基础类型和<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>类型通过调用<code class="" data-v-9b6ac311><!--[-->reflect.TypeOf()<!--]--><!----><!----></code>都打印出了对应的类型信息。注意<code class="" data-v-9b6ac311><!--[-->reflect.TypeOf<!--]--><!----><!----></code>返回的是一个<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>接口类型，我们通过调用这个接口的<code class="" data-v-9b6ac311><!--[-->String()<!--]--><!----><!----></code>方法，得到最终的字符串信息。<!--]--></p><p><!--[-->在前面学习<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>的章节中，我们知道一个具体的数据类型是可以赋值给一个<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>类型的，反过来则不行，要用到<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>的断言。在一个<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>赋值之后，其实是对应了两个类型，一个是静态类型，就是在程序编译期就确定的类型，<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>的静态类型就是接口<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>，同时当<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>赋值之后，他还有一个动态类型，就是被赋值的那个数据的具体类型，假设在上例中，我们将<code class="" data-v-9b6ac311><!--[-->st<!--]--><!----><!----></code>赋值给一个空<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>，那么这个<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>的动态类型就是<code class="" data-v-9b6ac311><!--[-->Student<!--]--><!----><!----></code>。<!--]--></p><p><!--[-->对一个数据对象进行反射操作，其实是首先将具体对象类型转化为一个<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>类型，然后再将<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>类型转化为<code class="" data-v-9b6ac311><!--[-->reflect<!--]--><!----><!----></code>包下的反射类型，反射类型里的类型信息和值信息其实就是对应着这个中间类型<code class="" data-v-9b6ac311><!--[-->interface<!--]--><!----><!----></code>的类型和值。<!--]--></p><p><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.TypeOf()<!--]--><!----><!----></code>方法获取的就是这个<code class="" data-v-9b6ac311><!--[-->interface{}<!--]--><!----><!----></code>中的类型部分。<!--]--></p><h3 id="reflectvalueof"><a href="#reflectvalueof"><!--[-->reflect.ValueOf()<!--]--></a></h3><p><!--[-->同理，<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>方法自然就是获取接口中的值部分，<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>的返回值其实就是一个<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>结构。<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name string
+    Age  int
+}
+
+func main() {
+    var num int64 = 100
+    v1 := reflect.ValueOf(num)
+    fmt.Println(v1)
+    fmt.Println(v1.String())
+
+    st := Student{
+       Name: &quot;zhangsan&quot;,
+       Age:  18,
+    }
+    v2 := reflect.ValueOf(st)
+    fmt.Println(v2)
+    fmt.Println(v2.String())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>100
+&lt;int64 Value&gt;
+{zhangsan 18}
+&lt;main.Student Value&gt;
+</pre><!----></figure><p><!--[-->注意到这里<code class="" data-v-9b6ac311><!--[-->fmt.Println(v1)<!--]--><!----><!----></code>和<code class="" data-v-9b6ac311><!--[-->fmt.Println(v1.String())<!--]--><!----><!----></code>打印的不一样，上面说了<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>的返回值就是一个<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>结构，但是<code class="" data-v-9b6ac311><!--[-->fmt.Println(v1)<!--]--><!----><!----></code>却打印出了具体的值，这是因为<code class="" data-v-9b6ac311><!--[-->fmt.Println<!--]--><!----><!----></code>的参数是一个接口类型，在执行过程中有一些类型转换，对<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>结构做了特殊处理。<!--]--></p><h3 id="go-语言数据种类"><a href="#go-语言数据种类"><!--[-->Go 语言数据种类<!--]--></a></h3><p><!--[-->在 Go 语言中常用的数据类型有 26 种<!--]--></p><p><!--[-->这些类型中包含<code class="" data-v-9b6ac311><!--[-->int<!--]--><!----><!----></code>，<code class="" data-v-9b6ac311><!--[-->bool<!--]--><!----><!----></code>之类的基础数据类型，也包含<code class="" data-v-9b6ac311><!--[-->Struct<!--]--><!----><!----></code>，<code class="" data-v-9b6ac311><!--[-->Array<!--]--><!----><!----></code>，<code class="" data-v-9b6ac311><!--[-->Map<!--]--><!----><!----></code>等复合类型，有了这些类型，我们用<code class="" data-v-9b6ac311><!--[-->type struct<!--]--><!----><!----></code>自定义的任何类型都可以由他们组合完成。
+看个<code class="" data-v-9b6ac311><!--[-->type struct<!--]--><!----><!----></code>定义的数据类型使用反射的例子：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type WrapInt int
+
+func main() {
+    var num1 int = 100
+    var num2 WrapInt = 1000
+
+    num1 = int(num2) // 不同类型的type赋值，这里要强转
+
+    typeNum1 := reflect.TypeOf(num1)
+    fmt.Printf(&quot;type of num1 is %s\n&quot;, typeNum1.String())
+
+    typeNum2 := reflect.TypeOf(num2)
+    fmt.Printf(&quot;type of num2 is %s\n&quot;, typeNum2.String())
+
+    fmt.Printf(&quot;kind of num1 is %v\n&quot;, typeNum1.Kind())
+    fmt.Printf(&quot;kind of num2 is %v\n&quot;, typeNum2.Kind())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>type of num1 is int
+type of num2 is main.WrapInt
+kind of num1 is int
+kind of num2 is int
+</pre><!----></figure><p><!--[-->通过<code class="" data-v-9b6ac311><!--[-->WrapInt<!--]--><!----><!----></code>的定义可以看到，<code class="" data-v-9b6ac311><!--[-->WrapInt<!--]--><!----><!----></code>其实就是用<code class="" data-v-9b6ac311><!--[-->type<!--]--><!----><!----></code>给<code class="" data-v-9b6ac311><!--[-->int<!--]--><!----><!----></code>去了个别名，二者底层其实都是<code class="" data-v-9b6ac311><!--[-->int<!--]--><!----><!----></code>类型，但是通过<code class="" data-v-9b6ac311><!--[-->reflect.TypeOf<!--]--><!----><!----></code>获取到各自的<code class="" data-v-9b6ac311><!--[-->type<!--]--><!----><!----></code>其实是不一样的，不同<code class="" data-v-9b6ac311><!--[-->type<!--]--><!----><!----></code>之间的变量赋值是需要类型强制转换的，但是深层次的去分析<code class="" data-v-9b6ac311><!--[-->type<!--]--><!----><!----></code>的种类，即<code class="" data-v-9b6ac311><!--[-->Kind<!--]--><!----><!----></code>确是一样的。<!--]--></p><h2 id="反射使用"><a href="#反射使用"><!--[-->反射使用<!--]--></a></h2><h3 id="值对象"><a href="#值对象"><!--[-->值对象<!--]--></a></h3><p><!--[--><code class="" data-v-9b6ac311><!--[-->reflect<!--]--><!----><!----></code>包下跟值对象相关的常用函数或方法：<!--]--></p><figure data-v-tippy class="md-table" data-v-adb68e13><!--[--><table class="scrollcheck-x scroll" data-v-adb68e13><!--[--><thead><!--[--><tr><!--[--><th><!--[-->函数/方法<!--]--></th><th><!--[-->说明<!--]--></th><!--]--></tr><!--]--></thead><tbody><!--[--><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.TypeOf()<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取某个对象的反射类型实现(<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>)<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取某个对象的反射值对象(<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>)<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.NumField()<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取结构体的反射值对象中的字段个数，只对结构体类型有效<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.Field(i)<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取结构体的反射值对象中的第 i 个字段，只对结构体类型有效<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Kind()<!--]--><!----><!----></code><!--]--></td><td><!--[-->从反射值对象中获取该值的种类<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.MapKeys()<!--]--><!----><!----></code><!--]--></td><td><!--[-->对 map 的每个键的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象组成的一个切片<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.MapIndex(i)<!--]--><!----><!----></code><!--]--></td><td><!--[-->根据 map 的某个键的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象，返回值的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.Len()<!--]--><!----><!----></code><!--]--></td><td><!--[-->对切片或数组的反射对象求切片或数组的长度<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.Index(i)<!--]--><!----><!----></code><!--]--></td><td><!--[-->返回切片或数组第 i 个元素的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>值<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Int()/reflect.Uint()/reflect.String()/reflect.Bool()<!--]--><!----><!----></code><!--]--></td><td><!--[-->从反射的值对象中取出对应值，注意<code class="" data-v-9b6ac311><!--[-->reflect.Int()/reflect.Uint()<!--]--><!----><!----></code>方法对种类做了合并处理，它们只返回相应的最大范围的类型，<code class="" data-v-9b6ac311><!--[-->Int()<!--]--><!----><!----></code>返回<code class="" data-v-9b6ac311><!--[-->Int64<!--]--><!----><!----></code>类型，<code class="" data-v-9b6ac311><!--[-->Uint()<!--]--><!----><!----></code>返回<code class="" data-v-9b6ac311><!--[-->Uint64<!--]--><!----><!----></code>类型<!--]--></td><!--]--></tr><!--]--></tbody><!--]--></table><!--]--><span style="display:none;" class=""><span class="iconify i-tabler:text-wrap-disabled" aria-hidden="true" style="display:none;" data-v-adb68e13></span><button class="button" data-v-adb68e13 data-v-cd9f03ef><div class="button-main" data-v-cd9f03ef><span class="iconify i-tabler:text-wrap" aria-hidden="true" style="" data-v-cd9f03ef></span><!--[-->自动换行<!--]--></div><!----></button></span></figure><h4 id="获取-struct-反射值"><a href="#获取-struct-反射值"><!--[-->获取 struct 反射值<!--]--></a></h4><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+
+    st := Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 95.5,
+    }
+    v := reflect.ValueOf(st)
+    fmt.Printf(&quot;the field num of Student is %d\n&quot;, v.NumField())
+    fmt.Printf(&quot;field1 type is %v, value is %s\n&quot;, v.Field(0).Type().Name(), v.Field(0).String())
+    fmt.Printf(&quot;field2 type is %v, value is %d\n&quot;, v.Field(1).Type().Name(), v.Field(1).Int())
+    fmt.Printf(&quot;field2 type is %v, value is %f\n&quot;, v.Field(2).Type().Name(), v.Field(2).Float())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>the field num of Student is 3
+field1 type is string, value is zhangsan
+field2 type is int, value is 18
+field2 type is float64, value is 95.500000
+</pre><!----></figure><p><!--[--><code class="" data-v-9b6ac311><!--[-->v := reflect.ValueOf(st)<!--]--><!----><!----></code>，<code class="" data-v-9b6ac311><!--[-->v<!--]--><!----><!----></code>是一个<code class="" data-v-9b6ac311><!--[-->Student<!--]--><!----><!----></code>类型的反射值对象，通过<code class="" data-v-9b6ac311><!--[-->v.NumField()<!--]--><!----><!----></code>可以得出<code class="" data-v-9b6ac311><!--[-->Student<!--]--><!----><!----></code>类型的字段个数，然后<code class="" data-v-9b6ac311><!--[-->v.Field(i).Type().Name()<!--]--><!----><!----></code>打印出各个字段值的类型，<code class="" data-v-9b6ac311><!--[-->v.Field(i)<!--]--><!----><!----></code>打印出各个字段值
+注意：<code class="" data-v-9b6ac311><!--[-->NumField()<!--]--><!----><!----></code>和<code class="" data-v-9b6ac311><!--[-->Field()<!--]--><!----><!----></code>方法只有原对象是结构体时才能调用，否则会 panic<!--]--></p><h4 id="获取-map-反射值"><a href="#获取-map-反射值"><!--[-->获取 map 反射值<!--]--></a></h4><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+func main() {
+    m := map[int]uint32{
+       1: 100,
+       2: 200,
+    }
+    v := reflect.ValueOf(m)
+    for _, k := range v.MapKeys() {
+       field := v.MapIndex(k)
+       fmt.Printf(&quot;key type is %v, key = %d; value type is %v, value = %d\n&quot;, k.Type().Name(), k.Int(), field.Type().Name(), field.Uint())
+    }
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>key type is int, key = 1; value type is uint32, value = 100
+key type is int, key = 2; value type is uint32, value = 200
+</pre><!----></figure><p><!--[--><code class="" data-v-9b6ac311><!--[-->v := reflect.ValueOf(m)<!--]--><!----><!----></code>对 map 类型的对象 m 进行反射，通过<code class="" data-v-9b6ac311><!--[-->v.MapKeys()<!--]--><!----><!----></code>的到 m 中所有 key 的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象 k，然后通过<code class="" data-v-9b6ac311><!--[-->v.MapIndex(k)<!--]--><!----><!----></code>的到对应 key 反射值对象的 value 反射值对象，然后通过<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>的<code class="" data-v-9b6ac311><!--[-->Type().Name()<!--]--><!----><!----></code>方法获取 map 中 key，value 的类型，然后打印出对应值<!--]--></p><h4 id="获取-slice-反射值"><a href="#获取-slice-反射值"><!--[-->获取 slice 反射值<!--]--></a></h4><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+func main() {
+    slice := []int{1, 2, 3}
+    v1 := reflect.ValueOf(slice)
+    for i := 0; i &lt; v1.Len(); i++ {
+       elem := v1.Index(i)
+       fmt.Printf(&quot;%v &quot;, elem.Interface())
+    }
+
+    fmt.Println()
+
+    nums := [3]int{4, 5, 6}
+    v2 := reflect.ValueOf(nums)
+    for i := 0; i &lt; v2.Len(); i++ {
+       elem := v2.Index(i)
+       fmt.Printf(&quot;%v &quot;, elem.Interface())
+    }
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>1 2 3
+4 5 6
+</pre><!----></figure><p><!--[--><code class="" data-v-9b6ac311><!--[-->v1<!--]--><!----><!----></code>，<code class="" data-v-9b6ac311><!--[-->v2<!--]--><!----><!----></code>分别是切片和数组的反射值对象，通过<code class="" data-v-9b6ac311><!--[-->Len()<!--]--><!----><!----></code>获取到数组或切片中的元素个数，然后通过<code class="" data-v-9b6ac311><!--[-->v.Index(i)<!--]--><!----><!----></code>获取对应元素的<code class="" data-v-9b6ac311><!--[-->reflect.value<!--]--><!----><!----></code>对象，打印出其值<!--]--></p><blockquote><!--[--><p><!--[--><strong><!--[-->注意：<code class="" data-v-9b6ac311><!--[-->Len()<!--]--><!----><!----></code>和<code class="" data-v-9b6ac311><!--[-->Index(i)<!--]--><!----><!----></code>方法只能在原对象是切片，数组或字符串时才能调用，其他类型会 panic<!--]--></strong>。<!--]--></p><!--]--></blockquote><h3 id="类型对象"><a href="#类型对象"><!--[-->类型对象<!--]--></a></h3><p><!--[-->reflect 包下跟类型相关的常用函数或方法<!--]--></p><figure data-v-tippy class="md-table" data-v-adb68e13><!--[--><table class="scrollcheck-x scroll" data-v-adb68e13><!--[--><thead><!--[--><tr><!--[--><th><!--[-->函数/方法<!--]--></th><th><!--[-->说明<!--]--></th><!--]--></tr><!--]--></thead><tbody><!--[--><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.NumField()<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取结构体的反射值对象中的字段个数，只对结构体类型有效<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.Field(i)<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取结构体的反射值对象中的第 i 个字段，只对结构体类型有效<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.Elem()<!--]--><!----><!----></code><!--]--></td><td><!--[-->根据指针获取对应的具体类型<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.NumIn()<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取函数反射类型的参数个数<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.In(i)<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取函数反射类型的第 i 个参数<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.NumOut()<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取函数反射类型的返回值个数<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.Out(i)<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取函数反射类型的第 i 个返回值<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.NumMethod()<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取 struct 上绑定的方法个数<!--]--></td><!--]--></tr><tr><!--[--><td><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.Method(i)<!--]--><!----><!----></code><!--]--></td><td><!--[-->获取 struct 上绑定的第 i 个方法<!--]--></td><!--]--></tr><!--]--></tbody><!--]--></table><!--]--><span style="display:none;" class=""><span class="iconify i-tabler:text-wrap-disabled" aria-hidden="true" style="display:none;" data-v-adb68e13></span><button class="button" data-v-adb68e13 data-v-cd9f03ef><div class="button-main" data-v-cd9f03ef><span class="iconify i-tabler:text-wrap" aria-hidden="true" style="" data-v-cd9f03ef></span><!--[-->自动换行<!--]--></div><!----></button></span></figure><h4 id="struct-反射类型"><a href="#struct-反射类型"><!--[-->struct 反射类型<!--]--></a></h4><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    st := Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    t := reflect.TypeOf(st)
+    fmt.Println(t.Name())
+    fmt.Println(t.Kind())
+    fmt.Println(t.NumField())
+    for i := 0; i &lt; t.NumField(); i++ {
+       fmt.Printf(&quot;field1 name is %s, field1 type is %s\n&quot;, t.Field(i).Name, t.Field(i).Type.String())
+    }
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>Student
+struct
+3
+field1 name is Name, field1 type is string
+</pre><!----></figure><p><!--[-->通过<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>的<code class="" data-v-9b6ac311><!--[-->Name()<!--]--><!----><!----></code>方法可以获取对应的<code class="" data-v-9b6ac311><!--[-->Type<!--]--><!----><!----></code>类型，<code class="" data-v-9b6ac311><!--[-->Kind()<!--]--><!----><!----></code>方法获取底层的数据种类，即<code class="" data-v-9b6ac311><!--[-->kind<!--]--><!----><!----></code>，跟<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>一样，<code class="" data-v-9b6ac311><!--[-->reflect.Type<!--]--><!----><!----></code>也提供了<code class="" data-v-9b6ac311><!--[-->NumField()<!--]--><!----><!----></code>方法用于获取结构体对象中的字段个数，通过<code class="" data-v-9b6ac311><!--[-->t.Field(i).Name<!--]--><!----><!----></code>可以获取对应字段的名字。同样，<code class="" data-v-9b6ac311><!--[-->Field(i)<!--]--><!----><!----></code>和<code class="" data-v-9b6ac311><!--[-->NumField()<!--]--><!----><!----></code>也只能对结构体反射使用<!--]--></p><h4 id="指针反射类型"><a href="#指针反射类型"><!--[-->指针反射类型<!--]--></a></h4><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    t := reflect.TypeOf(st)
+
+    fmt.Println(t.Kind())
+    fmt.Println(t.Elem().Name())     // 这里一定要加Elem()，根据指针获取到具体类型后，才能或者具体的type名
+    fmt.Println(t.Elem().NumField()) // 这里一定要加Elem()，根据指针获取到具体类型后，才能字段个数
+    for i := 0; i &lt; t.Elem().NumField(); i++ {
+       fmt.Printf(&quot;field1 name is %s, field1 type is %s\n&quot;, t.Elem().Field(i).Name, t.Elem().Field(i).Type.String())
+    }
+
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>ptr
+Student
+3
+field1 name is Name, field1 type is string
+field2 name is Age, field2 type is int
+field3 name is Score, field3 type is float64
+</pre><!----></figure><p><!--[-->可以看到，跟上面直接获取<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>有一点点小小的区别，那就是<code class="" data-v-9b6ac311><!--[-->fmt.Println(t.Kind())<!--]--><!----><!----></code>打印出的是一个<code class="" data-v-9b6ac311><!--[-->ptr<!--]--><!----><!----></code>指针类型，而不再是<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>类型，正是因为这里是一个<code class="" data-v-9b6ac311><!--[-->ptr<!--]--><!----><!----></code>，所以我们不能直接在这个<code class="" data-v-9b6ac311><!--[-->ptr<!--]--><!----><!----></code>上调用.Name()以及其他的.NumField()之类的方法，要根据<code class="" data-v-9b6ac311><!--[-->ptr<!--]--><!----><!----></code>的.Elem()获取到具体类型之后，才能用这些方法，否则程序就回报<code class="" data-v-9b6ac311><!--[-->panic<!--]--><!----><!----></code>，这点一定要注意<!--]--></p><h4 id="函数反射类型"><a href="#函数反射类型"><!--[-->函数反射类型<!--]--></a></h4><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+func Add(num1, num2 int) (int, error) {
+    return num1 + num2, nil
+}
+
+func main() {
+
+    fmt.Println(&quot;input:&quot;)
+    t := reflect.TypeOf(Add)
+    for i := 0; i &lt; t.NumIn(); i++ {
+       tIn := t.In(i)
+       fmt.Print(tIn.Name())
+       fmt.Printf(&quot; &quot;)
+    }
+    fmt.Printf(&quot;\n--------------------------------&quot;)
+
+    fmt.Println(&quot;output:&quot;)
+    for i := 0; i &lt; t.NumOut(); i++ {
+       tOut := t.Out(i)
+       fmt.Print(tOut.Name())
+       fmt.Print(&quot; &quot;)
+    }
+
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>input:
+int int
+--------------------------------
+output:
+int error
+</pre><!----></figure><p><!--[--><code class="" data-v-9b6ac311><!--[-->t := reflect.TypeOf(Add)<!--]--><!----><!----></code>获取到 Add 函数的<code class="" data-v-9b6ac311><!--[-->type<!--]--><!----><!----></code>类型，然后通过<code class="" data-v-9b6ac311><!--[-->NumIn()<!--]--><!----><!----></code>方法获得 Add 函数的参数个数，依次打印出参数的类型。通过<code class="" data-v-9b6ac311><!--[-->NumOut()<!--]--><!----><!----></code>方法获得 Add 函数的返回值个数，依次打印出返回值的类型<!--]--></p><h4 id="_324-反射获取-struct-方法"><a href="#_324-反射获取-struct-方法"><!--[-->3.2.4 反射获取 struct 方法<!--]--></a></h4><figure class="z-codeblock collapsed collapsible" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func (s *Student) GetName() string {
+    return s.Name
+}
+
+func (s *Student) SetName(name string) {
+    s.Name = name
+}
+
+func (s *Student) GetAge() int {
+    return s.Age
+}
+
+func (s *Student) SetAge(age int) {
+    s.Age = age
+}
+
+func (s *Student) GetScore() float64 {
+    return s.Score
+}
+
+func (s *Student) SetScore(score float64) {
+    s.Score = score
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    t := reflect.TypeOf(st)
+
+    for i := 0; i &lt; t.NumMethod(); i++ {
+       m := t.Method(i)
+       fmt.Printf(&quot;%+v\n&quot;, m)
+    }
+}
+</pre><button class="toggle-btn" aria-label="展开代码块" data-v-7f42e922><span class="iconify i-tabler:chevrons-up toggle-icon is-collapsed" aria-hidden="true" style="" data-v-7f42e922></span><span data-v-7f42e922>50 lines, 716 chars, 716 B</span></button></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>{GetName func(*main.Student) string}
+{SetName func(*main.Student, string)}
+{GetAge func(*main.Student) int}
+{SetAge func(*main.Student, int)}
+{GetScore func(*main.Student) float64}
+{SetScore func(*main.Student, float64)}
+</pre><!----></figure><ul><!--[--><li><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Type.NumMethod()<!--]--><!----><!----></code>：返回 struct 所绑定的的方法个数<!--]--></li><li><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Type.Method(i)<!--]--><!----><!----></code>：返回第 i 个方法的<code class="" data-v-9b6ac311><!--[-->reflect.Method<!--]--><!----><!----></code>对象<!--]--></li><!--]--></ul><p><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Method<!--]--><!----><!----></code>定义在<code class="" data-v-9b6ac311><!--[-->src/reflect/type.go<!--]--><!----><!----></code>文件：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>type Method struct {
+  Name    string // 方法名
+  PkgPath string
+  Type  Type  // 方法类型（
+  Func  Value // 方法值（方法的接收器作为第一个参数）
+  Index int   // 是结构体中的第几个方法
+}
+</pre><!----></figure><p><!--[-->所以，通过<code class="" data-v-9b6ac311><!--[-->reflect.Method<!--]--><!----><!----></code>对象，我们可以获取到<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>所绑定的对应方法的方法名，方法类型等信息<!--]--></p><h3 id="通过反射调用方法"><a href="#通过反射调用方法"><!--[-->通过反射调用方法<!--]--></a></h3><p><!--[-->在上一小节我们知道了<code class="" data-v-9b6ac311><!--[-->reflect.Type.Method(i)<!--]--><!----><!----></code>可以获取到<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>所绑定的具体的方法对象<code class="" data-v-9b6ac311><!--[-->reflect.Method<!--]--><!----><!----></code>，通过这个对象，我们不仅可以获取方法的详细信息，还可以动态的调用方法。
+其实在<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>里我们也可以使用<code class="" data-v-9b6ac311><!--[-->NumMethod()<!--]--><!----><!----></code>/<code class="" data-v-9b6ac311><!--[-->Method(i)<!--]--><!----><!----></code>方法获取到对应的方法信息，不同的是<code class="" data-v-9b6ac311><!--[-->reflect.Value.Method(i)<!--]--><!----><!----></code>返回的使一个<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象，但是同样可以根据这个对象来动态调用方法，只是两者调用方法的方式有所区别
+请看具体例子：<!--]--></p><figure class="z-codeblock collapsed collapsible" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func (s *Student) GetName() string {
+    return s.Name
+}
+
+func (s *Student) SetName(name string) {
+    s.Name = name
+}
+
+func (s *Student) GetAge() int {
+    return s.Age
+}
+
+func (s *Student) SetAge(age int) {
+    s.Age = age
+}
+
+func (s *Student) GetScore() float64 {
+    return s.Score
+}
+
+func (s *Student) SetScore(score float64) {
+    s.Score = score
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    fmt.Printf(&quot;st === %+v\n&quot;, st)
+
+    t := reflect.TypeOf(st)
+    v := reflect.ValueOf(st)
+
+    m1, ok := t.MethodByName(&quot;SetName&quot;)  // 获取SetName方法
+    fmt.Printf(&quot;t get func by name:%t\n&quot;, ok)
+
+    argsV1 := make([]reflect.Value, 0)
+    argsV1 = append(argsV1, v)
+    argsV1 = append(argsV1, reflect.ValueOf(&quot;lisi&quot;))
+    m1.Func.Call(argsV1)       //
+    fmt.Printf(&quot;st === %+v\n&quot;, st)
+
+    m2 := v.MethodByName(&quot;SetName&quot;)    // 获取SetName方法
+    argsV2 := make([]reflect.Value, 0)
+    argsV2 = append(argsV2, reflect.ValueOf(&quot;wangwu&quot;))
+    m2.Call(argsV2)
+    fmt.Printf(&quot;st === %+v\n&quot;, st)
+}
+</pre><button class="toggle-btn" aria-label="展开代码块" data-v-7f42e922><span class="iconify i-tabler:chevrons-up toggle-icon is-collapsed" aria-hidden="true" style="" data-v-7f42e922></span><span data-v-7f42e922>63 lines, 1179 chars, 1.17 KiB</span></button></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>st === &amp;{Name:zhangsan Age:18 Score:90.5}
+t get func by name:true
+st === &amp;{Name:lisi Age:18 Score:90.5}
+st === &amp;{Name:wangwu Age:18 Score:90.5}
+</pre><!----></figure><p><!--[-->可以看到通过<code class="" data-v-9b6ac311><!--[-->reflect.Type.MethodByName()<!--]--><!----><!----></code>方法获取到的<code class="" data-v-9b6ac311><!--[-->reflect.Method<!--]--><!----><!----></code>对象和<code class="" data-v-9b6ac311><!--[-->reflect.Value.MethodByName()<!--]--><!----><!----></code>方法获取到的<code class="" data-v-9b6ac311><!--[-->reflect.Method<!--]--><!----><!----></code>获取到的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象都可以在程序运行时动态的调用方法修改结构本身，<code class="" data-v-9b6ac311><!--[-->student<!--]--><!----><!----></code>的<code class="" data-v-9b6ac311><!--[-->name<!--]--><!----><!----></code>由<code class="" data-v-9b6ac311><!--[-->zhangsan<!--]--><!----><!----></code>------&gt;<code class="" data-v-9b6ac311><!--[-->lisi<!--]--><!----><!----></code>------&gt;<code class="" data-v-9b6ac311><!--[-->wangwu<!--]--><!----><!----></code>。
+但是二者的调用存在一个区别：通过<code class="" data-v-9b6ac311><!--[-->reflect.Method<!--]--><!----><!----></code>调用方法，必须使用<code class="" data-v-9b6ac311><!--[-->Func<!--]--><!----><!----></code>字段，而且要传入接收器的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>作为第一个参数<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>m1.Func.Call(argsV1)
+</pre><!----></figure><p><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value.MethodByName()<!--]--><!----><!----></code>返回一个<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象，它不需要接收器的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>作为第一个参数，而且直接使用<code class="" data-v-9b6ac311><!--[-->Call()<!--]--><!----><!----></code>发起方法调用：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>m2.Call(argsV2)
+</pre><!----></figure><h3 id="通过反射设置值"><a href="#通过反射设置值"><!--[-->通过反射设置值<!--]--></a></h3><p><!--[-->在介绍通过反射设置或者说是修改值的方法之前，首先介绍一个概念，反射寻址。简单的说，可寻址就是可以根据地址找到值，在反射里面，<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>由<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>方法得到，根据命名就可以知道<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>是得到一个值对象，显然他不能得到这个值的地址。所以通过<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>方法得到的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>都是不可寻址的。在<code class="" data-v-9b6ac311><!--[-->reflect<!--]--><!----><!----></code>包下有一个<code class="" data-v-9b6ac311><!--[-->CanAddr()<!--]--><!----><!----></code>方法可以用于验证一个对象是否可寻址<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    v := reflect.ValueOf(st)
+    fmt.Println(v.CanAddr())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>false
+</pre><!----></figure><p><!--[-->尽管这里<code class="" data-v-9b6ac311><!--[-->st<!--]--><!----><!----></code>是一个<code class="" data-v-9b6ac311><!--[-->Student<!--]--><!----><!----></code>类型的指针，但是经过<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>之后得到的对象<code class="" data-v-9b6ac311><!--[-->v<!--]--><!----><!----></code>，仍然是不能寻址的，他只能反映出当前指针指向的具体元素的地址，而当前指针自身所在的内存地址是无从得知的
+经过前面学习指针反射类型的学习，我们知道了假设<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf()<!--]--><!----><!----></code>返回的是一个指针的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象，那么我们可以调用<code class="" data-v-9b6ac311><!--[-->reflect.Value.Elem()<!--]--><!----><!----></code>方法得到具体的类型，而此时得到的这个反射具体类型就是可寻址的，我们可以知道他的地址，道理很简单，因为<code class="" data-v-9b6ac311><!--[-->reflect.Value.Elem()<!--]--><!----><!----></code>获取到的值，记录了根据指针获取到值这个获取路径，显然我们可以根据值追溯到地址<!--]--></p><ol><!--[--><li><!--[-->reflect.Value.Elem()方法得到具体的类型可寻址<!--]--></li><!--]--></ol><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    v := reflect.ValueOf(st)
+    fmt.Println(v.Elem().CanAddr())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>true
+</pre><!----></figure><p><!--[-->可以看到，通过<code class="" data-v-9b6ac311><!--[-->reflect.Value.Elem()<!--]--><!----><!----></code>方法得到具体的类型之后，这个具体的类型就是可寻址的，所以<code class="" data-v-9b6ac311><!--[-->CanAddr()<!--]--><!----><!----></code>方法返回<code class="" data-v-9b6ac311><!--[-->true<!--]--><!----><!----></code><!--]--></p><ol start="2"><!--[--><li><!--[-->对切片进行反射时，通过 reflect.Value.Index(i)获取到的 reflect.Value 对象是可以寻址的<!--]--></li><!--]--></ol><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    slice := []int{1, 2, 3, 4, 5}
+    v := reflect.ValueOf(slice)
+    fmt.Println(v.Index(0).CanAddr())
+    fmt.Println(v.Index(1).CanAddr())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>true
+true
+</pre><!----></figure><p><!--[-->可以看到，通过<code class="" data-v-9b6ac311><!--[-->reflect.Value.Index(i)<!--]--><!----><!----></code>获取到的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象是可以寻址的，所以<code class="" data-v-9b6ac311><!--[-->CanAddr()<!--]--><!----><!----></code>方法返回<code class="" data-v-9b6ac311><!--[-->true<!--]--><!----><!----></code>。但是对数组<code class="" data-v-9b6ac311><!--[-->reflect.Value.Index(i)<!--]--><!----><!----></code>获取到的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象是不可寻址的<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    nums := [3]int{1, 2, 3}
+    v1 := reflect.ValueOf(nums)
+    fmt.Println(v1.Index(0).CanAddr())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>false
+</pre><!----></figure><p><!--[-->可以看到，对数组<code class="" data-v-9b6ac311><!--[-->reflect.Value.Index(i)<!--]--><!----><!----></code>获取到的<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>对象是不可寻址的
+通过<code class="" data-v-9b6ac311><!--[-->reflect.ValueOf<!--]--><!----><!----></code>的到的其实是原始数据的一份拷贝，切片底层实现其实是一个<code class="" data-v-9b6ac311><!--[-->stuct<!--]--><!----><!----></code>类型，<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>里包含一个执行具体数组的指针，对切片拷贝，虽然拷贝了这个<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>，自然<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>里的指针也拷贝了一份，但是两个指针执行同一个内存区域，所以修改拷贝的切片，也会影响原值<!--]--></p><ol start="3"><!--[--><li><!--[-->通过结构体的指针获取到的字段也是可寻址的<!--]--></li><!--]--></ol><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    v := reflect.ValueOf(st)
+    f := v.Elem().Field(0)
+    fmt.Println(f.CanAddr())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>true
+</pre><!----></figure><p><!--[-->可以看到，通过结构体的指针获取到的字段也是可寻址的。通过上面分析，可寻址就是可以找到数据本身，而不是找到数据的副本，既然我们找到了数据本身，那么就可以对原数据修改，即设置值了吗？
+大体上是这样，但是条件可能还要更严格一些，刚是可寻址还不够，比如当<code class="" data-v-9b6ac311><!--[-->struct<!--]--><!----><!----></code>里含有未导出字段时，这个未导出字段时不可设置的。所以，在<code class="" data-v-9b6ac311><!--[-->reflect<!--]--><!----><!----></code>包下有一个专门的方法用于判断这个值是否可修改：<code class="" data-v-9b6ac311><!--[-->CanSet()<!--]--><!----><!----></code>
+假设我们将<code class="" data-v-9b6ac311><!--[-->Student<!--]--><!----><!----></code>的<code class="" data-v-9b6ac311><!--[-->score<!--]--><!----><!----></code>字段改为未导出的，然后运行以下代码：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    score float64
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       score: 90.5,
+    }
+    v := reflect.ValueOf(st)
+    f := v.Elem().Field(0)
+    fmt.Println(f.CanSet())
+    f2 := v.Elem().Field(2)
+    fmt.Println(f2.CanSet())
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>true
+false
+</pre><!----></figure><p><!--[-->可以看到，可导出字段<code class="" data-v-9b6ac311><!--[-->Name<!--]--><!----><!----></code>是可设置的，而不可导出字段<code class="" data-v-9b6ac311><!--[-->score<!--]--><!----><!----></code>是不可设置的。当我们判定一个值是可设置之后，接下来要怎么修改这个值呢？
+<code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>为基础类型提供了一系列特殊的<code class="" data-v-9b6ac311><!--[-->Set<!--]--><!----><!----></code>方法：<code class="" data-v-9b6ac311><!--[-->SetInt<!--]--><!----><!----></code>、<code class="" data-v-9b6ac311><!--[-->SetUint<!--]--><!----><!----></code>、<code class="" data-v-9b6ac311><!--[-->SetFloat<!--]--><!----><!----></code>等在反射的时候修改对应类型值。
+下面看个具体例子：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    v := reflect.ValueOf(st)
+    f := v.Elem().Field(0)
+    f.SetString(&quot;lisi&quot;)
+    fmt.Printf(&quot;st = %+v\n&quot;, st)
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>st = &amp;{Name:lisi Age:18 Score:90.5}
+</pre><!----></figure><p><!--[-->可以看到，通过调用第一个字段<code class="" data-v-9b6ac311><!--[-->reflect.value<!--]--><!----><!----></code>的<code class="" data-v-9b6ac311><!--[-->SetString<!--]--><!----><!----></code>方法，将<code class="" data-v-9b6ac311><!--[-->st<!--]--><!----><!----></code>对象的<code class="" data-v-9b6ac311><!--[-->Name<!--]--><!----><!----></code>改为了<code class="" data-v-9b6ac311><!--[-->lisi<!--]--><!----><!----></code>。<!--]--></p><h2 id="结构体标签"><a href="#结构体标签"><!--[-->结构体标签<!--]--></a></h2><p><!--[-->当我们判定一个值是可设置之后，接下来要怎么修改这个值呢？<!--]--></p><p><!--[--><code class="" data-v-9b6ac311><!--[-->reflect.Value<!--]--><!----><!----></code>为基础类型提供了一系列特殊的<code class="" data-v-9b6ac311><!--[-->Set<!--]--><!----><!----></code>方法：<code class="" data-v-9b6ac311><!--[-->SetInt<!--]--><!----><!----></code>、<code class="" data-v-9b6ac311><!--[-->SetUint<!--]--><!----><!----></code>、<code class="" data-v-9b6ac311><!--[-->SetFloat<!--]--><!----><!----></code>等在反射的时候修改对应类型值。<!--]--></p><p><!--[-->下面看个具体例子：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string
+    Age   int
+    Score float64
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    v := reflect.ValueOf(st)
+    f := v.Elem().Field(0)
+    f.SetString(&quot;lisi&quot;)
+    fmt.Printf(&quot;st = %+v\n&quot;, st)
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>st = &amp;{Name:lisi Age:18 Score:90.5}
+</pre><!----></figure><p><!--[-->可以看到，通过调用第一个字段<code class="" data-v-9b6ac311><!--[-->reflect.value<!--]--><!----><!----></code>的<code class="" data-v-9b6ac311><!--[-->SetString<!--]--><!----><!----></code>方法，将<code class="" data-v-9b6ac311><!--[-->st<!--]--><!----><!----></code>对象的<code class="" data-v-9b6ac311><!--[-->Name<!--]--><!----><!----></code>改为了<code class="" data-v-9b6ac311><!--[-->lisi<!--]--><!----><!----></code>。<!--]--></p><h3 id="结构体标签-1"><a href="#结构体标签-1"><!--[-->结构体标签<!--]--></a></h3><p><!--[-->我们在定义结构体的时候，可以为每个字段后面加一个标签，即<code class="" data-v-9b6ac311><!--[-->StructTag<!--]--><!----><!----></code>，标签其实就是一组键值对，每个键值对用空格分开，这些标签信息可以通过反射获取：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>go</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-go shiki scrollcheck-x" data-v-7f42e922>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;reflect&quot;
+)
+
+type Student struct {
+    Name  string  `json:&quot;name&quot;`
+    Age   int     `json:&quot;age&quot;`
+    Score float64 `json:&quot;score&quot;`
+}
+
+func main() {
+    st := &amp;Student{
+       Name:  &quot;zhangsan&quot;,
+       Age:   18,
+       Score: 90.5,
+    }
+    t := reflect.TypeOf(st).Elem()
+    for i := 0; i &lt; t.NumField(); i++ {
+       f := t.Field(i)
+       fmt.Println(f.Tag)
+    }
+}
+</pre><!----></figure><p><!--[-->运行结果：<!--]--></p><figure class="z-codeblock" style="--collapsed-rows:16;--tab-size:3;" data-v-7f42e922><figcaption data-v-7f42e922><span data-v-7f42e922></span><span class="language" data-v-7f42e922>text</span><div class="operations" data-v-7f42e922><button data-v-7f42e922>自动换行</button><button data-v-7f42e922>复制</button></div></figcaption><pre class="language-text shiki scrollcheck-x" data-v-7f42e922>json:&quot;name&quot;
+json:&quot;age&quot;
+json:&quot;score&quot;
+</pre><!----></figure><h2 id="反射的优缺点"><a href="#反射的优缺点"><!--[-->反射的优缺点<!--]--></a></h2><p><!--[-->优点：<!--]--></p><ul><!--[--><li><!--[-->可以提升程序代码的灵活性，根据条件在程序运行时灵活的调用函数，并且修改源代码结构<!--]--></li><!--]--></ul><p><!--[-->缺点：<!--]--></p><ul><!--[--><li><!--[-->主要是性能影响，反射过程中会有大量的内存开辟和 gc 过程，导致程序的性能降低<!--]--></li><!--]--></ul></article><div class="post-footer" data-v-1cea170b><!----><!----><!--[--><section data-v-1cea170b><div class="title text-creative" data-v-1cea170b>许可协议</div><div class="content" data-v-1cea170b><!--[--><p data-v-1cea170b> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener noreferrer" target="_blank" class="z-link" data-v-1cea170b data-v-84e39d9a><!--[--><span class="iconify i-ri:creative-commons-line domain-icon" aria-hidden="true" style="" data-v-84e39d9a></span><!--[-->署名-非商业性使用-相同方式共享 4.0 国际<!--]--><!--]--></a> 许可协议，转载请注明出处。 </p><!--]--></div></section><!--]--></div><!--[--><!----><div class="surround-post" dir="ltr" data-v-07dd1310><!--[--><a href="/2025/08/go-timer" class="surround-link" data-v-07dd1310><!--[--><span class="iconify i-zi:solar-rewind-back-bold-duotone rtl-flip" aria-hidden="true" style="" data-v-07dd1310></span><div class="surround-text" data-v-07dd1310><strong class="title text-tech" data-v-07dd1310>Go Timer 与 Ticker 定时器详解</strong><span title="2025-08-21" class="date" data-v-07dd1310><!----><!----><time data-year="2-digit" data-month="long" data-day="numeric" data-numeric="auto" data-relative="false" data-title="false" datetime="2025-08-20T16:00:00.000Z" data-prehydrate-id=":z0yH6SRwXn:">August 20, 25</time></span></div><!--]--></a><!--]--><!--[--><a href="/2025/08/go-context1" class="surround-link" align-end data-v-07dd1310><!--[--><span class="iconify i-zi:solar-rewind-forward-bold-duotone rtl-flip" aria-hidden="true" style="" data-v-07dd1310></span><div class="surround-text" data-v-07dd1310><strong class="title text-tech" data-v-07dd1310>Go Context 原理与使用实践</strong><span title="2025-08-20" class="date" data-v-07dd1310><!----><!----><time data-year="2-digit" data-month="long" data-day="numeric" data-numeric="auto" data-relative="false" data-title="false" datetime="2025-08-19T16:00:00.000Z" data-prehydrate-id=":z0yH6SRwXn:">August 19, 25</time></span></div><!--]--></a><!--]--></div><!--]--><!----><!--]--><!--]--><!--]--><footer class="blog-footer" data-v-87318c93><nav class="footer-nav" data-v-87318c93><!--[--><div data-v-87318c93><hgroup class="text-creative" data-v-87318c93>探索</hgroup><menu data-v-87318c93><!--[--><li data-v-87318c93><a href="/atom.xml" rel="noopener noreferrer" target="_blank" data-v-87318c93><!--[--><span class="iconify i-tabler:rss" aria-hidden="true" style="" data-v-87318c93></span><span class="nav-text" data-v-87318c93>Atom订阅</span><!--]--></a></li><!--]--></menu></div><div data-v-87318c93><hgroup class="text-creative" data-v-87318c93>社交</hgroup><menu data-v-87318c93><!--[--><li data-v-87318c93><a href="https://github.com/codepzj" rel="noopener noreferrer" target="_blank" data-v-87318c93><!--[--><span class="iconify i-tabler:brand-github" aria-hidden="true" style="" data-v-87318c93></span><span class="nav-text" data-v-87318c93>codepzj</span><!--]--></a></li><!--]--></menu></div><div data-v-87318c93><hgroup class="text-creative" data-v-87318c93>信息</hgroup><menu data-v-87318c93><!--[--><li data-v-87318c93><a href="/previews/example" class="" data-v-87318c93><!--[--><span class="iconify i-tabler:components" aria-hidden="true" style="" data-v-87318c93></span><span class="nav-text" data-v-87318c93>组件文档</span><!--]--></a></li><!--]--></menu></div><!--]--></nav><p data-v-87318c93>© 2026 浩瀚星河</p></footer></main><!--[--><!----><aside id="blog-aside" class="reserved" data-v-181b8fb4><!--[--><!--[--><!--[--><section class="blog-widget shrink" style="min-height:clamp(4rem, 20rem, 20rem);" data-v-5e9b7b8e data-v-3ab42032><hgroup class="widget-header text-creative" data-v-3ab42032><!--[-->文章目录<!--]--><span class="seperator" data-v-3ab42032></span><!--[--><a href="#main-content" aria-label="返回开头" data-v-5e9b7b8e><span class="iconify i-tabler:arrow-bar-to-up" aria-hidden="true" style="" data-v-5e9b7b8e></span></a><a href="#twikoo" aria-label="评论区" data-v-5e9b7b8e><span class="iconify i-tabler:message-dots" aria-hidden="true" style="" data-v-5e9b7b8e></span></a><!--]--></hgroup><div class="scrollcheck-y scrollbar-hidden widget-body" data-v-3ab42032><!----><!--[--><!----><ol class="toc" data-v-5e9b7b8e data-v-5e9b7b8e><!--[--><li class="" data-v-5e9b7b8e><a href="#什么是反射" title="什么是反射" data-v-5e9b7b8e>什么是反射</a><!----></li><li class="" data-v-5e9b7b8e><a href="#go-语言反射" title="Go 语言反射" data-v-5e9b7b8e>Go 语言反射</a><ol data-v-5e9b7b8e data-v-5e9b7b8e><!--[--><li class="" data-v-5e9b7b8e><a href="#reflecttypeof" title="reflect.TypeOf()" data-v-5e9b7b8e>reflect.TypeOf()</a><!----></li><li class="" data-v-5e9b7b8e><a href="#reflectvalueof" title="reflect.ValueOf()" data-v-5e9b7b8e>reflect.ValueOf()</a><!----></li><li class="" data-v-5e9b7b8e><a href="#go-语言数据种类" title="Go 语言数据种类" data-v-5e9b7b8e>Go 语言数据种类</a><!----></li><!--]--></ol></li><li class="" data-v-5e9b7b8e><a href="#反射使用" title="反射使用" data-v-5e9b7b8e>反射使用</a><ol data-v-5e9b7b8e data-v-5e9b7b8e><!--[--><li class="" data-v-5e9b7b8e><a href="#值对象" title="值对象" data-v-5e9b7b8e>值对象</a><ol data-v-5e9b7b8e data-v-5e9b7b8e><!--[--><li class="" data-v-5e9b7b8e><a href="#获取-struct-反射值" title="获取 struct 反射值" data-v-5e9b7b8e>获取 struct 反射值</a><!----></li><li class="" data-v-5e9b7b8e><a href="#获取-map-反射值" title="获取 map 反射值" data-v-5e9b7b8e>获取 map 反射值</a><!----></li><li class="" data-v-5e9b7b8e><a href="#获取-slice-反射值" title="获取 slice 反射值" data-v-5e9b7b8e>获取 slice 反射值</a><!----></li><!--]--></ol></li><li class="" data-v-5e9b7b8e><a href="#类型对象" title="类型对象" data-v-5e9b7b8e>类型对象</a><ol data-v-5e9b7b8e data-v-5e9b7b8e><!--[--><li class="" data-v-5e9b7b8e><a href="#struct-反射类型" title="struct 反射类型" data-v-5e9b7b8e>struct 反射类型</a><!----></li><li class="" data-v-5e9b7b8e><a href="#指针反射类型" title="指针反射类型" data-v-5e9b7b8e>指针反射类型</a><!----></li><li class="" data-v-5e9b7b8e><a href="#函数反射类型" title="函数反射类型" data-v-5e9b7b8e>函数反射类型</a><!----></li><li class="" data-v-5e9b7b8e><a href="#_324-反射获取-struct-方法" title="3.2.4 反射获取 struct 方法" data-v-5e9b7b8e>3.2.4 反射获取 struct 方法</a><!----></li><!--]--></ol></li><li class="" data-v-5e9b7b8e><a href="#通过反射调用方法" title="通过反射调用方法" data-v-5e9b7b8e>通过反射调用方法</a><!----></li><li class="" data-v-5e9b7b8e><a href="#通过反射设置值" title="通过反射设置值" data-v-5e9b7b8e>通过反射设置值</a><!----></li><!--]--></ol></li><li class="" data-v-5e9b7b8e><a href="#结构体标签" title="结构体标签" data-v-5e9b7b8e>结构体标签</a><ol data-v-5e9b7b8e data-v-5e9b7b8e><!--[--><li class="" data-v-5e9b7b8e><a href="#结构体标签-1" title="结构体标签" data-v-5e9b7b8e>结构体标签</a><!----></li><!--]--></ol></li><li class="" data-v-5e9b7b8e><a href="#反射的优缺点" title="反射的优缺点" data-v-5e9b7b8e>反射的优缺点</a><!----></li><!--]--></ol><!--]--></div></section><!--]--><!--]--><!--]--></aside><!--]--></div><div id="blog-panel" class="" style="transform:;" data-v-6e20fcbc><button class="toggle-aside widescreen-only" aria-label="切换侧边栏" data-v-6e20fcbc><span class="iconify i-tabler:align-right rtl-flip" aria-hidden="true" style="" data-v-6e20fcbc></span></button><span class="iconify i-tabler:layout-sidebar-filled" aria-hidden="true" style="display:none;" data-v-6e20fcbc></span><button class="toggle-sidebar mobile-only" aria-label="切换菜单" data-v-6e20fcbc><span class="iconify i-tabler:layout-sidebar rtl-flip" aria-hidden="true" style="" data-v-6e20fcbc></span></button></div><!--[--><!--]--><!--]--></div><div id="teleports"></div><script data-hid=":z0yH6SRwXn:">document.querySelectorAll('[data-prehydrate-id*=":z0yH6SRwXn:"]').forEach(e=>{let t=window._nuxtTimeNow||=Date.now(),n=(e,t)=>t>0?e[0].toUpperCase()+e.slice(1):e,r=e.getAttribute(`datetime`);if(!r)return;let i=new Date(r);if(Number.isNaN(i.getTime()))return;let a={};for(let t of e.getAttributeNames())if(t.startsWith(`data-`)){let r=t.slice(5).split(`-`).map(n).join(``);r===`relativeStyle`&&(r=`style`);let i=e.getAttribute(t);a[r]=i===`true`?!0:i===`false`?!1:i}if(a.relative){let n=(i.getTime()-t)/1e3,r=[{unit:`second`,seconds:1,threshold:60},{unit:`minute`,seconds:60,threshold:60},{unit:`hour`,seconds:3600,threshold:24},{unit:`day`,seconds:86400,threshold:30},{unit:`month`,seconds:2592e3,threshold:12},{unit:`year`,seconds:31536e3,threshold:1/0}],{unit:o,seconds:s}=r.find(({seconds:e,threshold:t})=>Math.abs(n/e)<t)||r[r.length-1],c=n/s;e.textContent=new Intl.RelativeTimeFormat(a.locale,a).format(Math.round(c),o)}else e.textContent=new Intl.DateTimeFormat(a.locale,a).format(i)})</script><script>window.__NUXT__={};window.__NUXT__.config={public:{arch:"x64",buildTime:"2026-08-06T17:38:54.467+00:00[UTC]",ci:"GitHub Actions",nodeVersion:"v24.18.0",platform:"linux",mdc:{components:{prose:true,map:{},customElements:[]},headings:{anchorLinks:{h1:false,h2:true,h3:true,h4:true,h5:false,h6:false}},highlight:false},"nuxt-seo-utils-version":"8.3.1","seo-utils":{canonicalQueryWhitelist:["page","sort","filter","search","q","category","tag"],canonicalLowercase:true,tagPriority:"low",separator:"|",titleSeparator:""},content:{wsUrl:""},"nuxt-robots":{version:"6.1.1",isNuxtContentV2:false,debug:false,credits:true,groups:[{userAgent:["*"],disallow:["/preview","/previews/*"],allow:[],contentUsage:[],contentSignal:[],_indexable:true,_rules:[{pattern:"/preview",allow:false},{pattern:"/previews/*",allow:false}],_normalized:true}],sitemap:["/sitemap.xml"],header:true,robotsEnabledValue:"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",robotsDisabledValue:"noindex, nofollow",cacheControl:"max-age=14400, must-revalidate",botDetection:true,pageMetaRobots:{}}},app:{baseURL:"/",buildId:"205b64c9-3f3c-4ad5-b936-446935a16891",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script><script type="application/ld+json" data-nuxt-schema-org="true" data-hid="schema-org-graph">{"@context":"https://schema.org","@graph":[{"@id":"https://codepzj.github.io/#website","@type":"WebSite","inLanguage":"zh-CN","name":"浩瀚星河","url":"https://codepzj.github.io/"},{"@id":"https://codepzj.github.io/2025/08/go-reflect#webpage","@type":"WebPage","name":"Go 反射机制详解","url":"https://codepzj.github.io/2025/08/go-reflect","isPartOf":{"@id":"https://codepzj.github.io/#website"},"potentialAction":[{"@type":"ReadAction","target":["https://codepzj.github.io/2025/08/go-reflect"]}]}]}</script><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/2025/08/go-reflect/_payload.json?205b64c9-3f3c-4ad5-b936-446935a16891">[{"state":1,"once":16,"_errors":17,"serverRendered":5,"path":19,"pinia":20,"prerenderedAt":36},["Reactive",2],{"$scolor-mode":3,"$snuxt-seo-utils:routeRules":7,"$ssite-config":8},{"preference":4,"value":4,"unknown":5,"forced":6},"system",true,false,{"head":-1,"seoMeta":-1},{"_priority":9,"defaultLocale":12,"env":13,"name":14,"url":15},{"env":10,"name":11,"url":11,"defaultLocale":11},-15,-3,"zh-CN","production","浩瀚星河","https://codepzj.github.io",["Set"],["ShallowReactive",18],{"content:/2025/08/go-reflect":-1,"surround:/2025/08/go-reflect":-1},"/2025/08/go-reflect",["Reactive",21],{"layout":22,"search":28,"modal":32,"shiki":35},{"state":23,"avoidTargets":25},["Ref",24],"none",["Ref",26],["Reactive",27],[],{"word":29,"debouncedWord":31},["EmptyRef",30],"\"\"",["EmptyShallowRef",30],{"modals":33},["ShallowReactive",34],[],{},1786037981132]</script></body></html>

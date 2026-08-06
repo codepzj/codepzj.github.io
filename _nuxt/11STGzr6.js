@@ -1,0 +1,1 @@
+import{_ as r,c as s,r as o,o as n}from"./DYW-sWa7.js";const t={};function c(e,a){return n(),s("em",null,[o(e.$slots,"default")])}const l=Object.assign(r(t,[["render",c]]),{__name:"ProseEm"});export{l as default};

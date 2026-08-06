@@ -1,0 +1,1 @@
+import{_ as r,c as s,r as o,o as n}from"./DYW-sWa7.js";const t={};function c(e,a){return n(),s("li",null,[o(e.$slots,"default")])}const _=Object.assign(r(t,[["render",c]]),{__name:"ProseLi"});export{_ as default};

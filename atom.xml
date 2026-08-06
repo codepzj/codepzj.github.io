@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/assets/atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://codepzj.github.io</id>
+  <title>浩瀚星河</title>
+  <updated>2026-08-06T17:38:54.467+00:00[UTC]</updated>
+  <description>浩瀚星河的个人技术博客，记录 Golang 学习与开发实践。</description>
+  <author>
+    <name>浩瀚星河</name>
+    <email></email>
+    <uri>https://codepzj.github.io</uri>
+  </author>
+  <link href="https://codepzj.github.io/atom.xml" rel="self"></link>
+  <link href="https://codepzj.github.io" rel="alternate"></link>
+  <language>zh-CN</language>
+  <generator uri="https://github.com/L33Z22L11/blog-v3" version="3.7.1">Clarity</generator>
+  <icon>/favicon.png</icon>
+  <logo>https://codepzj.github.io/avatar.jpg</logo>
+  <rights>© 2026 浩瀚星河</rights>
+  <subtitle>记录 Golang 学习与开发实践</subtitle>
+  <entry>
+    <id>https://codepzj.github.io/2026/08/flutter-huawei-usb-device-debugging</id>
+    <title>macOS 使用华为手机调试 Flutter：ADB 设备为空排查</title>
+    <updated>2026-08-05T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>记录在 macOS 上连接华为 Android 真机运行 Flutter 项目的完整过程，包含 ADB 无线配对与连接、USB 调试、MTP 模式、adb devices 为空及首次 Gradle 构建排查。</p> <a class="view-full" href="https://codepzj.github.io/2026/08/flutter-huawei-usb-device-debugging" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/08/flutter-huawei-usb-device-debugging"></link>
+    <summary>记录在 macOS 上连接华为 Android 真机运行 Flutter 项目的完整过程，包含 ADB 无线配对与连接、USB 调试、MTP 模式、adb devices 为空及首次 Gradle 构建排查。</summary>
+    <category term="移动开发"></category>
+    <published>2026-08-03T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/08/flutter-macos-environment-setup</id>
+    <title>macOS 搭建 Flutter Android 与 iOS 开发环境</title>
+    <updated>2026-08-01T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>记录在 Apple Silicon Mac 上搭建 Flutter 开发环境的完整过程，包括 Android Studio、Android SDK、模拟器、Xcode、CocoaPods、代理配置以及 flutter doctor 常见问题。</p> <a class="view-full" href="https://codepzj.github.io/2026/08/flutter-macos-environment-setup" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/08/flutter-macos-environment-setup"></link>
+    <summary>记录在 Apple Silicon Mac 上搭建 Flutter 开发环境的完整过程，包括 Android Studio、Android SDK、模拟器、Xcode、CocoaPods、代理配置以及 flutter doctor 常见问题。</summary>
+    <category term="移动开发"></category>
+    <published>2026-08-01T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/07/k8s-logs-to-elk-with-fluent-bit</id>
+    <title>使用 Fluent Bit 将 Kubernetes 日志采集到 ELK</title>
+    <updated>2026-07-28T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>从日志链路设计开始，完整介绍 Elasticsearch、Kibana 与 Fluent Bit 的部署、鉴权、持久化、Kubernetes 元数据补充、索引验证及常见故障排查。</p> <a class="view-full" href="https://codepzj.github.io/2026/07/k8s-logs-to-elk-with-fluent-bit" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/07/k8s-logs-to-elk-with-fluent-bit"></link>
+    <summary>从日志链路设计开始，完整介绍 Elasticsearch、Kibana 与 Fluent Bit 的部署、鉴权、持久化、Kubernetes 元数据补充、索引验证及常见故障排查。</summary>
+    <category term="云原生"></category>
+    <published>2026-07-28T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/08/minikube-install</id>
+    <title>Minikube 安装与环境配置</title>
+    <updated>2026-06-19T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍在 Linux 环境安装 Minikube、配置 Docker 驱动、启动集群并安装 kubectl 的完整步骤。</p> <a class="view-full" href="https://codepzj.github.io/2025/08/minikube-install" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/08/minikube-install"></link>
+    <summary>介绍在 Linux 环境安装 Minikube、配置 Docker 驱动、启动集群并安装 kubectl 的完整步骤。</summary>
+    <category term="云原生"></category>
+    <published>2025-08-20T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/06/local-kubectl-manage-remote</id>
+    <title>本地 kubectl 管理远程</title>
+    <updated>2026-06-19T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍如何将远程 Minikube 集群的 kubeconfig 迁移到本地，处理证书数据、虚拟 IP、Docker 端口映射与 TLS 证书校验问题，实现本地 kubectl 管理远程 Kubernetes。</p> <a class="view-full" href="https://codepzj.github.io/2026/06/local-kubectl-manage-remote" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/06/local-kubectl-manage-remote"></link>
+    <summary>介绍如何将远程 Minikube 集群的 kubeconfig 迁移到本地，处理证书数据、虚拟 IP、Docker 端口映射与 TLS 证书校验问题，实现本地 kubectl 管理远程 Kubernetes。</summary>
+    <category term="云原生"></category>
+    <published>2026-06-18T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/06/study-vs-work</id>
+    <title>工作中如何做好技术积累</title>
+    <updated>2026-06-13T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>古人云：“活到老，学到老。”互联网算是最辛苦的行业之一，“加班”对工程师来说已是“家常便饭”，同时互联网技术又日新月异，很多工程师都疲于应付，叫苦不堪。以至于长期以来流传一个很广的误解：35岁是程序员工作的终点。  如何在繁忙的工作中做好技术积累，构建个人核心竞争力，相信是很多工程师同行</p> <a class="view-full" href="https://codepzj.github.io/2026/06/study-vs-work" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/06/study-vs-work"></link>
+    <summary>古人云：“活到老，学到老。”互联网算是最辛苦的行业之一，“加班”对工程师来说已是“家常便饭”，同时互联网技术又日新月异，很多工程师都疲于应付，叫苦不堪。以至于长期以来流传一个很广的误解：35岁是程序员工作的终点。  如何在繁忙的工作中做好技术积累，构建个人核心竞争力，相信是很多工程师同行</summary>
+    <category term="成长随笔"></category>
+    <published>2026-06-13T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/05/wrk</id>
+    <title>wrk HTTP 压测工具使用与指标分析</title>
+    <updated>2026-06-09T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>本文围绕 wrk 压测工具展开，从基础使用到结果分析，结合错误率、尾延迟（P95/P99）、稳定性等核心指标，给出一套可落地的评估方法，用于定位系统性能瓶颈并计算稳定状态下的最大可承载吞吐量。</p> <a class="view-full" href="https://codepzj.github.io/2026/05/wrk" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/05/wrk"></link>
+    <summary>本文围绕 wrk 压测工具展开，从基础使用到结果分析，结合错误率、尾延迟（P95/P99）、稳定性等核心指标，给出一套可落地的评估方法，用于定位系统性能瓶颈并计算稳定状态下的最大可承载吞吐量。</summary>
+    <category term="工程实践"></category>
+    <published>2026-05-05T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/redis-ctjcxb</id>
+    <title>Redis 缓存穿透、击穿与雪崩</title>
+    <updated>2026-06-08T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>分析 Redis 缓存穿透、缓存击穿和缓存雪崩的成因、区别及常见应对方案。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/redis-ctjcxb" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/redis-ctjcxb"></link>
+    <summary>分析 Redis 缓存穿透、缓存击穿和缓存雪崩的成因、区别及常见应对方案。</summary>
+    <category term="数据库"></category>
+    <published>2025-09-24T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/03/gh-ost-migrate-mysql-online</id>
+    <title>千万级 Mysql 表结构变更实战</title>
+    <updated>2026-05-05T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>利用 gh-ost 安全、实时地迁移数据，实现大表结构变更，无停机、无锁表。</p> <a class="view-full" href="https://codepzj.github.io/2026/03/gh-ost-migrate-mysql-online" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/03/gh-ost-migrate-mysql-online"></link>
+    <summary>利用 gh-ost 安全、实时地迁移数据，实现大表结构变更，无停机、无锁表。</summary>
+    <category term="数据库"></category>
+    <published>2026-03-09T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-config</id>
+    <title>Kratos 配置管理实践</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 Kratos 配置文件的组织方式、配置加载流程以及在服务中读取和使用配置的方法。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-config" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-config"></link>
+    <summary>介绍 Kratos 配置文件的组织方式、配置加载流程以及在服务中读取和使用配置的方法。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-folder</id>
+    <title>Kratos 项目目录结构详解</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>解析 Kratos 项目的目录结构和各层职责，说明 service、biz、data 与 server 等模块的关系。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-folder" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-folder"></link>
+    <summary>解析 Kratos 项目的目录结构和各层职责，说明 service、biz、data 与 server 等模块的关系。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-instruction</id>
+    <title>Kratos 常用命令速查</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>整理 Kratos 项目运行、构建、添加 Proto 文件和生成服务代码等常用命令。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-instruction" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-instruction"></link>
+    <summary>整理 Kratos 项目运行、构建、添加 Proto 文件和生成服务代码等常用命令。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-logger</id>
+    <title>Kratos 日志系统与 Zap 集成</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 Kratos 日志组件的使用方式，并演示文件输出、Helper 封装以及与 Zap 日志库的集成。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-logger" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-logger"></link>
+    <summary>介绍 Kratos 日志组件的使用方式，并演示文件输出、Helper 封装以及与 Zap 日志库的集成。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-request</id>
+    <title>Kratos HTTP 请求与路由配置</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 Kratos HTTP 服务中的请求处理、路由注册和 transport/http 组件的基本使用方式。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-request" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-request"></link>
+    <summary>介绍 Kratos HTTP 服务中的请求处理、路由注册和 transport/http 组件的基本使用方式。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-resp-proxy</id>
+    <title>Kratos 自定义 HTTP 响应与错误处理</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍如何在 Kratos 中自定义 HTTP 成功响应与错误响应，并结合 Proto 错误码统一接口格式。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-resp-proxy" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-resp-proxy"></link>
+    <summary>介绍如何在 Kratos 中自定义 HTTP 成功响应与错误响应，并结合 Proto 错误码统一接口格式。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-svc-discover</id>
+    <title>Kratos 服务注册与发现实践</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 Kratos 接入 Consul 实现服务注册与发现，包括 Consul 部署、启动和客户端配置。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-svc-discover" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-svc-discover"></link>
+    <summary>介绍 Kratos 接入 Consul 实现服务注册与发现，包括 Consul 部署、启动和客户端配置。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-transaction</id>
+    <title>Kratos 事务管理与循环依赖解决方案</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 Kratos 项目中的事务抽象方法，并通过接口解耦解决 data 与 biz 层之间的循环依赖。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-transaction" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-transaction"></link>
+    <summary>介绍 Kratos 项目中的事务抽象方法，并通过接口解耦解决 data 与 biz 层之间的循环依赖。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/04/kratos-vscode-proto</id>
+    <title>VS Code 中配置 Protobuf 开发环境</title>
+    <updated>2026-04-11T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 VS Code 中 Protobuf 插件与导入路径的配置方法，解决 Kratos Proto 文件引用报错问题。</p> <a class="view-full" href="https://codepzj.github.io/2026/04/kratos-vscode-proto" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/04/kratos-vscode-proto"></link>
+    <summary>介绍 VS Code 中 Protobuf 插件与导入路径的配置方法，解决 Kratos Proto 文件引用报错问题。</summary>
+    <category term="微服务"></category>
+    <published>2026-04-11T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/02/mysql-master-slave-copy</id>
+    <title>MySQL 主从复制搭建与配置</title>
+    <updated>2026-02-26T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 MySQL 主从复制原理，并使用 Docker Compose 完成主库、从库和复制账号的配置。</p> <a class="view-full" href="https://codepzj.github.io/2026/02/mysql-master-slave-copy" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/02/mysql-master-slave-copy"></link>
+    <summary>介绍 MySQL 主从复制原理，并使用 Docker Compose 完成主库、从库和复制账号的配置。</summary>
+    <category term="数据库"></category>
+    <published>2026-02-26T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/02/go-delete-element-in-range</id>
+    <title>Go遍历时删除特定元素</title>
+    <updated>2026-02-19T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>Go遍历时候删除元素时候的坑，不能正序删除，不然会引起索引错位</p> <a class="view-full" href="https://codepzj.github.io/2026/02/go-delete-element-in-range" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/02/go-delete-element-in-range"></link>
+    <summary>Go遍历时候删除元素时候的坑，不能正序删除，不然会引起索引错位</summary>
+    <category term="Go语言"></category>
+    <published>2026-02-19T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/02/go-graceful-shutdown</id>
+    <title>Golang中的优雅关闭与退出</title>
+    <updated>2026-02-18T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>Golang中的优雅关闭与退出，去做一些日志刷盘、关闭基础设施和goroutine连接的操作。</p> <a class="view-full" href="https://codepzj.github.io/2026/02/go-graceful-shutdown" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/02/go-graceful-shutdown"></link>
+    <summary>Golang中的优雅关闭与退出，去做一些日志刷盘、关闭基础设施和goroutine连接的操作。</summary>
+    <category term="Go语言"></category>
+    <published>2026-02-18T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/02/git-semantic-release</id>
+    <title>Github CI自动发版</title>
+    <updated>2026-02-17T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍如何通过 GitHub Actions 和 Semantic Release 自动生成版本号、Tag 与发布记录。</p> <a class="view-full" href="https://codepzj.github.io/2026/02/git-semantic-release" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/02/git-semantic-release"></link>
+    <summary>介绍如何通过 GitHub Actions 和 Semantic Release 自动生成版本号、Tag 与发布记录。</summary>
+    <category term="工程实践"></category>
+    <published>2026-02-14T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/02/mysql-dev-table</id>
+    <title>MySQL 表结构常用操作</title>
+    <updated>2026-02-17T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>整理 MySQL 开发中常用的表结构操作，包括字段新增、修改、删除以及表结构维护相关 SQL。</p> <a class="view-full" href="https://codepzj.github.io/2026/02/mysql-dev-table" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/02/mysql-dev-table"></link>
+    <summary>整理 MySQL 开发中常用的表结构操作，包括字段新增、修改、删除以及表结构维护相关 SQL。</summary>
+    <category term="数据库"></category>
+    <published>2026-02-17T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/02/mysql-dev-user</id>
+    <title>MySQL 用户与权限管理</title>
+    <updated>2026-02-17T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>整理 MySQL 用户创建、授权、权限查看、权限刷新和用户删除等常用管理操作。</p> <a class="view-full" href="https://codepzj.github.io/2026/02/mysql-dev-user" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/02/mysql-dev-user"></link>
+    <summary>整理 MySQL 用户创建、授权、权限查看、权限刷新和用户删除等常用管理操作。</summary>
+    <category term="数据库"></category>
+    <published>2026-02-17T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/01/git-filter-repo</id>
+    <title>git-filter-repo 清理敏感信息</title>
+    <updated>2026-01-20T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>git-filter-repo清理敏感信息，防止git提交了敏感信息后导致的密钥泄漏</p> <a class="view-full" href="https://codepzj.github.io/2026/01/git-filter-repo" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/01/git-filter-repo"></link>
+    <summary>git-filter-repo清理敏感信息，防止git提交了敏感信息后导致的密钥泄漏</summary>
+    <category term="工程实践"></category>
+    <published>2026-01-20T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/10/canal</id>
+    <title>Canal 安装配置与 Go 客户端实践</title>
+    <updated>2026-01-14T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 Canal 的工作原理、服务端安装配置、Docker 部署方式以及 Go 客户端订阅 Binlog 的实践。</p> <a class="view-full" href="https://codepzj.github.io/2025/10/canal" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/10/canal"></link>
+    <summary>介绍 Canal 的工作原理、服务端安装配置、Docker 部署方式以及 Go 客户端订阅 Binlog 的实践。</summary>
+    <category term="数据库"></category>
+    <published>2025-10-27T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/01/grpc-metadata</id>
+    <title>gRPC Metadata 的传递与使用</title>
+    <updated>2026-01-06T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 gRPC Metadata 的创建、发送和读取方法，以及 Header、Trailer 在客户端与服务端之间的传递。</p> <a class="view-full" href="https://codepzj.github.io/2026/01/grpc-metadata" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/01/grpc-metadata"></link>
+    <summary>介绍 gRPC Metadata 的创建、发送和读取方法，以及 Header、Trailer 在客户端与服务端之间的传递。</summary>
+    <category term="微服务"></category>
+    <published>2026-01-04T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/12/grpc-4method</id>
+    <title>gRPC 四种通信模式详解</title>
+    <updated>2026-01-04T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 gRPC 的普通调用、客户端流、服务端流和双向流四种通信模式，并给出 Go 示例。</p> <a class="view-full" href="https://codepzj.github.io/2025/12/grpc-4method" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/12/grpc-4method"></link>
+    <summary>介绍 gRPC 的普通调用、客户端流、服务端流和双向流四种通信模式，并给出 Go 示例。</summary>
+    <category term="微服务"></category>
+    <published>2025-12-15T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2026/01/grpc-hello-demo</id>
+    <title>使用 Go 构建第一个 gRPC 服务</title>
+    <updated>2025-12-31T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>通过 Protocol Buffers 定义服务，生成 Go 代码并实现客户端与服务端，完成首个 gRPC 示例。</p> <a class="view-full" href="https://codepzj.github.io/2026/01/grpc-hello-demo" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2026/01/grpc-hello-demo"></link>
+    <summary>通过 Protocol Buffers 定义服务，生成 Go 代码并实现客户端与服务端，完成首个 gRPC 示例。</summary>
+    <category term="微服务"></category>
+    <published>2025-12-31T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/12/mcp-server-intro</id>
+    <title>MCP Server 基础概念与入门实践</title>
+    <updated>2025-12-27T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>mcp server原理理解，实操教程，ai客户端引入以及对ai编程的一些看法</p> <a class="view-full" href="https://codepzj.github.io/2025/12/mcp-server-intro" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/12/mcp-server-intro"></link>
+    <summary>mcp server原理理解，实操教程，ai客户端引入以及对ai编程的一些看法</summary>
+    <category term="工程实践"></category>
+    <published>2025-12-27T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/12/proto-syntax</id>
+    <title>Protocol Buffers 核心语法详解</title>
+    <updated>2025-12-10T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>系统介绍 Protocol Buffers 的消息、字段、枚举、服务、导入、oneof 和包装类型等核心语法。</p> <a class="view-full" href="https://codepzj.github.io/2025/12/proto-syntax" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/12/proto-syntax"></link>
+    <summary>系统介绍 Protocol Buffers 的消息、字段、枚举、服务、导入、oneof 和包装类型等核心语法。</summary>
+    <category term="微服务"></category>
+    <published>2025-12-08T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/proto-install</id>
+    <title>Protocol Buffers 安装与 Go 插件配置</title>
+    <updated>2025-12-09T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 protoc 的命令行安装方式、环境变量配置，以及 Go 代码生成插件的安装与验证。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/proto-install" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/proto-install"></link>
+    <summary>介绍 protoc 的命令行安装方式、环境变量配置，以及 Go 代码生成插件的安装与验证。</summary>
+    <category term="微服务"></category>
+    <published>2025-09-14T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/12/grpc-internals</id>
+    <title>gRPC 工作原理与通信流程</title>
+    <updated>2025-12-08T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>解析 gRPC 基于 HTTP/2 和 Protocol Buffers 的通信流程，以及客户端与服务端调用的核心机制。</p> <a class="view-full" href="https://codepzj.github.io/2025/12/grpc-internals" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/12/grpc-internals"></link>
+    <summary>解析 gRPC 基于 HTTP/2 和 Protocol Buffers 的通信流程，以及客户端与服务端调用的核心机制。</summary>
+    <category term="微服务"></category>
+    <published>2025-12-08T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/07/gomail</id>
+    <title>Go 使用 Gomail 发送邮件</title>
+    <updated>2025-12-01T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>gomail是是一款简单高效的邮件发送工具，可用于发送文本，图像，word，pdf等多种复杂格式，并且基于smtp服务器</p> <a class="view-full" href="https://codepzj.github.io/2025/07/gomail" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/07/gomail"></link>
+    <summary>gomail是是一款简单高效的邮件发送工具，可用于发送文本，图像，word，pdf等多种复杂格式，并且基于smtp服务器</summary>
+    <category term="Go语言"></category>
+    <published>2025-07-27T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/11/gitlab-ci</id>
+    <title>GitLab Runner 使用与 CICD 全面指南</title>
+    <updated>2025-12-01T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>Gitlab使用教程以及CI/CD的配置，触发工作流，减少手动部署的成本</p> <a class="view-full" href="https://codepzj.github.io/2025/11/gitlab-ci" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/11/gitlab-ci"></link>
+    <summary>Gitlab使用教程以及CI/CD的配置，触发工作流，减少手动部署的成本</summary>
+    <category term="工程实践"></category>
+    <published>2025-11-09T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/12/recemmend-algorithm</id>
+    <title>短视频的推荐算法</title>
+    <updated>2025-12-01T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍短视频推荐系统中的用户画像、内容特征和召回排序思路，并结合业务需求分析实现方向。</p> <a class="view-full" href="https://codepzj.github.io/2025/12/recemmend-algorithm" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/12/recemmend-algorithm"></link>
+    <summary>介绍短视频推荐系统中的用户画像、内容特征和召回排序思路，并结合业务需求分析实现方向。</summary>
+    <category term="技术观察"></category>
+    <published>2025-12-01T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/11/what-is-webhook</id>
+    <title>Webhook 工作原理与 Go 实现</title>
+    <updated>2025-11-17T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 Webhook 的事件通知机制、典型使用场景，并使用 Go 和 Gin 实现简单的回调接口。</p> <a class="view-full" href="https://codepzj.github.io/2025/11/what-is-webhook" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/11/what-is-webhook"></link>
+    <summary>介绍 Webhook 的事件通知机制、典型使用场景，并使用 Go 和 Gin 实现简单的回调接口。</summary>
+    <category term="工程实践"></category>
+    <published>2025-11-17T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/10/go-zap</id>
+    <title>Go Zap实现日志双写和切割</title>
+    <updated>2025-10-30T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>go-zap日志双写，日志切割，使用的zap库中的sugar版本</p> <a class="view-full" href="https://codepzj.github.io/2025/10/go-zap" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/10/go-zap"></link>
+    <summary>go-zap日志双写，日志切割，使用的zap库中的sugar版本</summary>
+    <category term="Go语言"></category>
+    <published>2025-10-29T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/10/kafka-go</id>
+    <title>使用 kafka-go 实现消息生产与消费</title>
+    <updated>2025-10-27T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>介绍 kafka-go 的安装与使用，并通过 Go 示例实现消息生产、消费和偏移量读取。</p> <a class="view-full" href="https://codepzj.github.io/2025/10/kafka-go" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/10/kafka-go"></link>
+    <summary>介绍 kafka-go 的安装与使用，并通过 Go 示例实现消息生产、消费和偏移量读取。</summary>
+    <category term="工程实践"></category>
+    <published>2025-10-27T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/10/elasticsearch-go</id>
+    <title>go-elasticsearch使用指南</title>
+    <updated>2025-10-26T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>go-elasticsearch v9版本go api的用法</p> <a class="view-full" href="https://codepzj.github.io/2025/10/elasticsearch-go" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/10/elasticsearch-go"></link>
+    <summary>go-elasticsearch v9版本go api的用法</summary>
+    <category term="数据库"></category>
+    <published>2025-10-26T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/10/elasticsearch</id>
+    <title>Elasticsearch 安装与基础操作</title>
+    <updated>2025-10-26T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>elasticsearch是一个分布式搜索引擎，本文讲述了elasticsearch的安装与使用</p> <a class="view-full" href="https://codepzj.github.io/2025/10/elasticsearch" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/10/elasticsearch"></link>
+    <summary>elasticsearch是一个分布式搜索引擎，本文讲述了elasticsearch的安装与使用</summary>
+    <category term="数据库"></category>
+    <published>2025-10-26T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/10/kratos-proto-error</id>
+    <title>kratos中proto文件引入其他proto爆红</title>
+    <updated>2025-10-24T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>记录 VS Code 开发 Kratos 时 Proto 文件跨目录引用报错的原因，以及插件配置解决方法。</p> <a class="view-full" href="https://codepzj.github.io/2025/10/kratos-proto-error" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/10/kratos-proto-error"></link>
+    <summary>记录 VS Code 开发 Kratos 时 Proto 文件跨目录引用报错的原因，以及插件配置解决方法。</summary>
+    <category term="微服务"></category>
+    <published>2025-10-24T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/go-defer</id>
+    <title>Go Defer 执行机制详解</title>
+    <updated>2025-09-29T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>本文讲述 Go 函数返回值与 defer 执行顺序的关系，通过三个实例分析值类型、具名返回值及引用类型在返回过程中的不同表现。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/go-defer" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/go-defer"></link>
+    <summary>本文讲述 Go 函数返回值与 defer 执行顺序的关系，通过三个实例分析值类型、具名返回值及引用类型在返回过程中的不同表现。</summary>
+    <category term="Go语言"></category>
+    <published>2025-09-29T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/tecent-sms-send</id>
+    <title>Go 接入腾讯云短信服务</title>
+    <updated>2025-09-27T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>短信验证码业务主要流程是用户请求后端，后端生成随机 6 位验证码，存入 Redis 缓存并调用腾讯云短信 SDK 发送到用户手机。前端提示短信发送成功，用户再输入验证码完成验证。为了防止接口被滥用，需要增加限流、图片验证码或签名加密等保护措施。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/tecent-sms-send" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/tecent-sms-send"></link>
+    <summary>短信验证码业务主要流程是用户请求后端，后端生成随机 6 位验证码，存入 Redis 缓存并调用腾讯云短信 SDK 发送到用户手机。前端提示短信发送成功，用户再输入验证码完成验证。为了防止接口被滥用，需要增加限流、图片验证码或签名加密等保护措施。</summary>
+    <category term="后端开发"></category>
+    <published>2025-09-27T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/go-method-up</id>
+    <title>Go 方法提升与嵌入类型</title>
+    <updated>2025-09-26T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>今天聊一下go的方法提升，在很多源码看到，查资料才发现可以这样用</p> <a class="view-full" href="https://codepzj.github.io/2025/09/go-method-up" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/go-method-up"></link>
+    <summary>今天聊一下go的方法提升，在很多源码看到，查资料才发现可以这样用</summary>
+    <category term="Go语言"></category>
+    <published>2025-09-23T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/what-is-brave</id>
+    <title>什么是勇敢</title>
+    <updated>2025-09-26T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>从个人成长和现实选择出发，讨论勇敢的含义，以及面对困难、未知与责任时应有的态度。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/what-is-brave" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/what-is-brave"></link>
+    <summary>从个人成长和现实选择出发，讨论勇敢的含义，以及面对困难、未知与责任时应有的态度。</summary>
+    <category term="成长随笔"></category>
+    <published>2025-09-24T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/docker-mysql-charset-problem</id>
+    <title>docker部署mysql中文乱码问题</title>
+    <updated>2025-09-16T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>分析 Docker 部署 MySQL 后出现中文乱码的原因，并通过服务端与连接字符集配置解决问题。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/docker-mysql-charset-problem" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/docker-mysql-charset-problem"></link>
+    <summary>分析 Docker 部署 MySQL 后出现中文乱码的原因，并通过服务端与连接字符集配置解决问题。</summary>
+    <category term="数据库"></category>
+    <published>2025-09-16T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/redis-hash-command</id>
+    <title>Redis Hash 常用命令</title>
+    <updated>2025-09-10T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>整理 Redis Hash 类型的字段写入、读取、删除、遍历和批量操作等常用命令。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/redis-hash-command" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/redis-hash-command"></link>
+    <summary>整理 Redis Hash 类型的字段写入、读取、删除、遍历和批量操作等常用命令。</summary>
+    <category term="数据库"></category>
+    <published>2025-09-09T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/redis-list-command</id>
+    <title>Redis List 常用命令</title>
+    <updated>2025-09-10T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>整理 Redis List 类型的左右插入、范围查询、弹出元素和阻塞读取等常用命令。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/redis-list-command" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/redis-list-command"></link>
+    <summary>整理 Redis List 类型的左右插入、范围查询、弹出元素和阻塞读取等常用命令。</summary>
+    <category term="数据库"></category>
+    <published>2025-09-09T16:00:00Z</published>
+  </entry>
+  <entry>
+    <id>https://codepzj.github.io/2025/09/redis-set-command</id>
+    <title>Redis Set 常用命令</title>
+    <updated>2025-09-10T16:00:00Z</updated>
+    <author>
+      <name>浩瀚星河</name>
+    </author>
+    <content type="html">
+      <![CDATA[ <p>整理 Redis Set 集合的元素增删、成员查询、集合遍历以及交并差集等常用命令。</p> <a class="view-full" href="https://codepzj.github.io/2025/09/redis-set-command" target="_blank">点击查看全文</a>]]>
+    </content>
+    <link href="https://codepzj.github.io/2025/09/redis-set-command"></link>
+    <summary>整理 Redis Set 集合的元素增删、成员查询、集合遍历以及交并差集等常用命令。</summary>
+    <category term="数据库"></category>
+    <published>2025-09-09T16:00:00Z</published>
+  </entry>
+</feed>

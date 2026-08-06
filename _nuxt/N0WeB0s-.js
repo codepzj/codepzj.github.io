@@ -1,0 +1,1 @@
+import{I as s,o,c as l,i as n,r as t,h as r,a2 as i,_ as d}from"./DYW-sWa7.js";const c=s({__name:"Folding",props:{title:{}},setup(a){return(e,_)=>(o(),l("details",null,[n("summary",null,[t(e.$slots,"title",{},()=>[r(i(a.title),1)],!0)]),t(e.$slots,"default",{},void 0,!0)]))}}),u=Object.assign(d(c,[["__scopeId","data-v-aad7bf99"]]),{__name:"Folding"});export{u as default};

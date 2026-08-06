@@ -1,0 +1,1 @@
+import{_ as s,o as c,c as t,i as n,r as o}from"./DYW-sWa7.js";const _={},r={class:"secret-container"},a={class:"secret"};function d(e,i){return c(),t("div",r,[n("div",a,[o(e.$slots,"default",{},void 0,!0)])])}const f=Object.assign(s(_,[["render",d],["__scopeId","data-v-6c19740c"]]),{__name:"ZSecret"});export{f as _};

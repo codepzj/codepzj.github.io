@@ -1,0 +1,1 @@
+import{_,o as a,d as s,t as e,r as n,v as c}from"./DYW-sWa7.js";const l={};function r(t,f){const o=c;return a(),s(o,null,{fallback:e(()=>[n(t.$slots,"default")]),default:e(()=>[n(t.$slots,"default")]),_:3})}const u=Object.assign(_(l,[["render",r]]),{__name:"UtilHydrateSafe"});export{u as _};

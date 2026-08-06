@@ -1,0 +1,1 @@
+import{_ as r,c as s,r as a,o}from"./DYW-sWa7.js";const t={};function n(e,c){return o(),s("thead",null,[a(e.$slots,"default")])}const l=Object.assign(r(t,[["render",n]]),{__name:"ProseThead"});export{l as default};

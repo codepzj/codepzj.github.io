@@ -1,0 +1,105 @@
+# 浩瀚星河
+
+> 浩瀚星河的个人技术博客，记录 Golang 学习与开发实践。
+
+## Content
+
+- [Link](https://codepzj.github.io/raw/link.md)
+- [Go Air 热重载工具使用指南](https://codepzj.github.io/raw/2025/07/go-air.md): 介绍 Go Air 热重载工具的安装、初始化和配置方法，提升本地开发与调试效率。
+- [Go Cache 单机缓存使用与原理](https://codepzj.github.io/raw/2025/07/go-cache.md): go-cache 是一个 golang 的缓存库, 用于缓存 k, v 对, 缓存时间过期后存储的值会失效, 底层是一个 map, 过期后内部 Item 是不会自动清除, 需要手动调用DeleteExpired方法清除过期项
+- [Go 使用 MinIO SDK 上传文件](https://codepzj.github.io/raw/2025/07/go-minio.md): MinIO 是一款开源的分布式对象存储服务，兼容 S3 协议，通过 Go SDK 可以轻松实现文件上传，只需初始化客户端并调用 FPutObject 方法即可完成文件存储，支持自定义 Content-Type 和私有化部署，是替代商业 OSS 的高性价比方案。
+- [Go 单元测试与覆盖率实践](https://codepzj.github.io/raw/2025/07/go-test.md): 介绍 Go 官方 testing 包的基本用法，包括单元测试、表驱动测试、子测试和覆盖率统计。
+- [Go Wire 依赖注入实践](https://codepzj.github.io/raw/2025/07/go-wire.md): Wire 是 Google 开发的 Go 依赖注入工具，通过自动生成代码管理模块依赖关系，解决手动初始化导致的混乱问题。它使用 wire.Build 定义依赖链，支持接口绑定和构造器集合，执行 wire 命令即可生成初始化代码。虽然学习成本较高，但能显著提升大型项目的可维护性，特别适合与 Gin 等框架集成使用。需注意处理循环依赖和接口绑定，小项目可能增加复杂度。
+- [Go 使用 Gomail 发送邮件](https://codepzj.github.io/raw/2025/07/gomail.md): gomail是是一款简单高效的邮件发送工具，可用于发送文本，图像，word，pdf等多种复杂格式，并且基于smtp服务器
+- [Go Channel 基础概念与用法](https://codepzj.github.io/raw/2025/08/go-channel1.md): 在 Go 语言中，channel 是一种用于**协程间通信**的数据结构。根据是否带缓冲区，channel 可分为**无缓冲区**和**有缓冲区**两类。
+
+**无缓冲区的 channel** 是一种同步通信方式，发送和接收必须“当场配对”，发送方在没有接收方的情况下会被挂起，直到数据被接收。这就像一个共享的杯子，只有顾客喝掉牛奶，奶农才能继续挤下一杯。
+
+**有缓冲区的 channel** 则支持异步通信，可以预先存入一定数量的值，只在缓冲区满时才会阻塞发送。它更像一个小型车间，奶农可以提前挤奶放进去，顾客随时取用。
+
+理解这两者的差异对于编写高效的并发程序非常关键，尤其是在处理 goroutine 调度与通信时。
+
+- [缓冲区为 1 和无缓冲区的 channel 有什么区别](https://codepzj.github.io/raw/2025/08/go-channel2.md): 带缓冲区的 channel（如容量为 1）允许发送方先发送后接收，不会立即阻塞；而无缓冲区的 channel 发送操作会阻塞当前 goroutine，直到有接收方同步接收，否则会造成死锁。因此缓冲区提供了发送和接收的解耦能力。
+- [Go Channel 生产者消费者模型](https://codepzj.github.io/raw/2025/08/go-channel3.md): 生产者消费者模型通过引入缓冲区，实现了生产与消费的解耦。无缓冲区的 channel 要求生产者与消费者同步配合，否则会阻塞，适合处理必须顺序执行的场景；而有缓冲区的 channel 则允许生产者先发送多个数据，无需等待消费者处理完成，适用于并发处理、异步任务等高性能场景。缓冲区提升了系统的灵活性、并发性和容错性。
+- [Go Channel 的 Select Case 用法](https://codepzj.github.io/raw/2025/08/go-channel4.md): `select case` 用于监听多个 channel 的就绪状态，只有当对应的读写操作**不阻塞**时才会执行。无缓冲通道需读写同时存在才就绪，有缓冲通道读需有值、写需未满。若多个 case 同时就绪，`select` 会**随机选择一个执行**，否则执行 `default`。配合 `time.After` 可实现超时控制，是并发中的常用模式。
+- [使用 Go Channel 实现简易 EventBus](https://codepzj.github.io/raw/2025/08/go-channel5.md): 本文介绍了一个适用于单机模块的 Go 语言事件总线（Eventbus）实现，用于异步事件的发布与订阅。通过 map[string]*EventChans 管理事件与多个通道的映射关系，并结合读写锁 sync.RWMutex 保证并发安全，实现了 Subscribe、UnSubscribe、Publish 三个核心方法，展示了如何安全高效地进行事件分发。适合 Go 初学者理解 channel 和并发控制。
+- [Go Context 原理与使用实践](https://codepzj.github.io/raw/2025/08/go-context1.md): Go语言的context包是并发编程的核心工具，主要用于管理goroutine的生命周期、传递取消信号和请求范围数据。通过WithCancel、WithTimeout、WithDeadline和WithValue等方法，可以从根context派生出子context，形成树状结构，实现优雅的协程控制和超时管理。context广泛应用于HTTP请求、数据库操作等场景，确保资源及时释放，避免泄漏。最佳实践包括及时调用cancel()、避免滥用WithValue传递业务参数，以及在goroutine中监听ctx.Done()以响应取消信号
+- [go jwt和redis实现用户登录注册以及查询](https://codepzj.github.io/raw/2025/08/go-jwt-redis-demo.md): 本项目基于 Gin + GORM + MySQL + Redis，实现了一个简单的用户登录注册系统，核心功能包括 JWT 鉴权与 Redis 用户缓存。用户登录成功后签发 JWT，访问受保护接口时通过中间件校验 Token，有效提升接口安全性。用户资料优先从 Redis 获取，未命中则回源数据库并写入缓存，兼顾性能与一致性，适合作为入门级全栈身份认证系统的学习案例。
+- [Go Panic 与 Recover 异常处理](https://codepzj.github.io/raw/2025/08/go-panic.md): Go 中的 `panic` 会导致当前 goroutine 崩溃，若未被 `recover` 捕获，则程序终止。`recover` 需配合 `defer` 使用，只能捕获**当前 goroutine** 内的 panic。若 panic 发生在子 goroutine 中，主 goroutine 的 `recover` 无法捕获，程序仍会崩溃，因此每个 goroutine 内需单独设置 `defer+recover` 才能防止异常扩散。
+- [Go 反射机制详解](https://codepzj.github.io/raw/2025/08/go-reflect.md): 反射是程序在运行时动态访问、检测和修改自身状态的能力，通过反射可以获取类型信息、调用方法或修改字段值。在Go语言中，反射由reflect包实现，核心是reflect.Type（类型接口）和reflect.Value（值结构体），分别对应接口的类型和值部分。反射常用于序列化、ORM框架等场景，但存在性能开销大、代码可读性差、破坏封装性等缺点。优化方法包括缓存反射结果、减少高频调用或使用替代方案（如泛型）。反射适合框架开发等动态需求场景，但业务代码中应谨慎使用
+- [Go Timer 与 Ticker 定时器详解](https://codepzj.github.io/raw/2025/08/go-timer.md): Timer 用于一次性计时，可通过 C 通道接收时间；AfterFunc 用于异步回调，不通过 C 通道；Ticker 用于周期性计时；select 多个就绪 case 随机选择，break 仅退出当前块
+- [Minikube 安装与环境配置](https://codepzj.github.io/raw/2025/08/minikube-install.md): 介绍在 Linux 环境安装 Minikube、配置 Docker 驱动、启动集群并安装 kubectl 的完整步骤。
+- [MySQL 常用数据类型详解](https://codepzj.github.io/raw/2025/08/mysql-datastructure.md): 介绍 MySQL 常用整数、浮点数、字符串、日期时间等数据类型及字段设计注意事项。
+- [MySQL 日期与时间函数](https://codepzj.github.io/raw/2025/08/mysql-date-function.md): 整理 MySQL 日期获取、格式化、时间计算和日期差值等常用函数及使用方法。
+- [MySQL 事务隔离级别详解](https://codepzj.github.io/raw/2025/08/mysql-isolation-grade.md): 介绍 MySQL 四种事务隔离级别、并发读写问题以及不同隔离级别之间的行为差异。
+- [使用 Navicat 图形化管理 MySQL](https://codepzj.github.io/raw/2025/08/mysql-navicat.md): 介绍使用 Navicat 连接和管理 MySQL，并通过图形界面完成数据库与数据表的常见操作。
+- [MySQL 常用数值函数](https://codepzj.github.io/raw/2025/08/mysql-number-function.md): 整理 MySQL 中取整、绝对值、随机数、幂运算等常用数值函数及其使用示例。
+- [MySQL 流程控制函数](https://codepzj.github.io/raw/2025/08/mysql-progress-function.md): 介绍 MySQL IF、IFNULL、CASE WHEN 等流程控制函数，并通过示例说明适用场景。
+- [SQL 语句分类：DDL、DML、DQL 与 DCL](https://codepzj.github.io/raw/2025/08/mysql-sql-category.md): 介绍 DDL、DML、DQL、DCL 和 TCL 等 SQL 语句分类，并列举常见操作示例。
+- [MySQL 常用字符串函数](https://codepzj.github.io/raw/2025/08/mysql-string-function.md): 整理 MySQL 字符串拼接、截取、替换、长度计算和大小写转换等常用函数。
+- [MySQL 事务的概念与特性](https://codepzj.github.io/raw/2025/08/mysql-what-is-transaction.md): 介绍 MySQL 事务的基本概念、ACID 特性以及事务在保证数据一致性方面的作用。
+- [Go 项目中的 Redis 缓存实践](https://codepzj.github.io/raw/2025/08/redis-in-golang-practice.md): 这篇文章记录了我在学习极客时间大明老师课程后，对 Redis 在 Go 项目中的实践总结。从初始化 Redis 客户端，到在仓储层引入缓存模块，再到结合 DDD 思想实现数据查询与缓存的解耦，逐步形成了更优雅的使用方式。
+- [docker部署mysql中文乱码问题](https://codepzj.github.io/raw/2025/09/docker-mysql-charset-problem.md): 分析 Docker 部署 MySQL 后出现中文乱码的原因，并通过服务端与连接字符集配置解决问题。
+- [Go Defer 执行机制详解](https://codepzj.github.io/raw/2025/09/go-defer.md): 本文讲述 Go 函数返回值与 defer 执行顺序的关系，通过三个实例分析值类型、具名返回值及引用类型在返回过程中的不同表现。
+- [Go 方法提升与嵌入类型](https://codepzj.github.io/raw/2025/09/go-method-up.md): 今天聊一下go的方法提升，在很多源码看到，查资料才发现可以这样用
+- [MySQL 索引原理：B+ 树](https://codepzj.github.io/raw/2025/09/mysql-bplustree.md): 解析 B+ 树的节点结构、范围查询和磁盘访问优势，说明 MySQL 索引选择 B+ 树的主要原因。
+- [MySQL 索引原理：B 树](https://codepzj.github.io/raw/2025/09/mysql-btree.md): 介绍 B 树的结构、查找过程与平衡机制，并说明它作为数据库索引数据结构时的基本工作原理。
+- [MySQL SQL 执行频次统计](https://codepzj.github.io/raw/2025/09/mysql-execute-rate.md): 介绍如何通过 MySQL 状态变量统计各类 SQL 的执行频次，用于观察数据库负载与操作分布。
+- [MySQL EXPLAIN 执行计划详解](https://codepzj.github.io/raw/2025/09/mysql-explain.md): 介绍 MySQL EXPLAIN 执行计划中的关键字段，并说明如何利用执行计划分析和优化查询。
+- [MySQL 索引类型与分类](https://codepzj.github.io/raw/2025/09/mysql-index-category.md): 介绍 MySQL 聚簇索引、二级索引、唯一索引和复合索引等常见索引类型及其区别。
+- [MySQL 索引基础与工作原理](https://codepzj.github.io/raw/2025/09/mysql-index-description.md): 介绍 MySQL 索引的作用、存储方式和查询优化原理，并说明索引对读写性能的影响。
+- [MySQL 查询性能分析方法](https://codepzj.github.io/raw/2025/09/mysql-performance-analyse.md): 介绍 MySQL Profiling 等性能分析方法，帮助定位 SQL 执行耗时与查询过程中的性能瓶颈。
+- [Protocol Buffers 安装与 Go 插件配置](https://codepzj.github.io/raw/2025/09/proto-install.md): 介绍 protoc 的命令行安装方式、环境变量配置，以及 Go 代码生成插件的安装与验证。
+- [Redis 通用键命令详解](https://codepzj.github.io/raw/2025/09/redis-common-commands.md): 整理 Redis 键查询、删除、判断存在、设置过期时间和查看类型等通用操作命令。
+- [Redis 缓存穿透、击穿与雪崩](https://codepzj.github.io/raw/2025/09/redis-ctjcxb.md): 分析 Redis 缓存穿透、缓存击穿和缓存雪崩的成因、区别及常见应对方案。
+- [Redis 核心数据类型详解](https://codepzj.github.io/raw/2025/09/redis-data-types.md): 介绍 Redis String、Hash、List、Set 和 Sorted Set 等核心数据类型及适用场景。
+- [Redis Hash 常用命令](https://codepzj.github.io/raw/2025/09/redis-hash-command.md): 整理 Redis Hash 类型的字段写入、读取、删除、遍历和批量操作等常用命令。
+- [Redis 安装、启动与连接](https://codepzj.github.io/raw/2025/09/redis-install.md): 介绍使用 Docker 安装 Redis、配置密码、启动服务并通过 redis-cli 连接实例的完整过程。
+- [Redis List 常用命令](https://codepzj.github.io/raw/2025/09/redis-list-command.md): 整理 Redis List 类型的左右插入、范围查询、弹出元素和阻塞读取等常用命令。
+- [NoSQL 数据库基础概念](https://codepzj.github.io/raw/2025/09/redis-nosql.md): 介绍关系型数据库与 NoSQL 数据库的区别，并说明 Redis 等 NoSQL 数据库的特点和使用场景。
+- [Redis Set 常用命令](https://codepzj.github.io/raw/2025/09/redis-set-command.md): 整理 Redis Set 集合的元素增删、成员查询、集合遍历以及交并差集等常用命令。
+- [Redis Sorted Set 常用命令](https://codepzj.github.io/raw/2025/09/redis-sorted-set-command.md): 整理 Redis Sorted Set 的成员写入、分数排序、区间查询和排名统计等常用命令。
+- [Redis String 常用命令](https://codepzj.github.io/raw/2025/09/redis-string-command.md): 整理 Redis String 类型的设置、读取、批量操作、过期时间与数值增减等常用命令。
+- [10万行报表导出优化实战：从 OFFSET 到游标分页](https://codepzj.github.io/raw/2025/09/report-export-optimization-from-offset-to-cursor-pagination.md): 这篇文章记录了一次大数据报表导出的优化实践。业务需求要求一次性导出10万条数据到Excel，最初采用全表扫描配合OFFSET分页，单次导出耗时超过30秒。经过分析慢查询日志，发现主要瓶颈在SQL层面和Excel写入方式。优化过程包括：只查询必要字段、去除无效条件、并发分片查询、流式写入Excel、最后引入游标分页避免大OFFSET扫描。最终导出耗时降至8秒。本文总结了SQL调优、分页策略以及大规模数据导出的关键经验。
+- [Go 接入腾讯云短信服务](https://codepzj.github.io/raw/2025/09/tecent-sms-send.md): 短信验证码业务主要流程是用户请求后端，后端生成随机 6 位验证码，存入 Redis 缓存并调用腾讯云短信 SDK 发送到用户手机。前端提示短信发送成功，用户再输入验证码完成验证。为了防止接口被滥用，需要增加限流、图片验证码或签名加密等保护措施。
+- [不急于求成，才是最长远的成长](https://codepzj.github.io/raw/2025/09/the-courage-to-grow-slowly.md): 在浮躁与内卷的社会中，保持专注与冷静，缓慢向上，也是最难得的成长勇气。
+- [什么是勇敢](https://codepzj.github.io/raw/2025/09/what-is-brave.md): 从个人成长和现实选择出发，讨论勇敢的含义，以及面对困难、未知与责任时应有的态度。
+- [Canal 安装配置与 Go 客户端实践](https://codepzj.github.io/raw/2025/10/canal.md): 介绍 Canal 的工作原理、服务端安装配置、Docker 部署方式以及 Go 客户端订阅 Binlog 的实践。
+- [Elasticsearch 安装与基础操作](https://codepzj.github.io/raw/2025/10/elasticsearch.md): elasticsearch是一个分布式搜索引擎，本文讲述了elasticsearch的安装与使用
+- [go-elasticsearch使用指南](https://codepzj.github.io/raw/2025/10/elasticsearch-go.md): go-elasticsearch v9版本go api的用法
+- [Go Zap实现日志双写和切割](https://codepzj.github.io/raw/2025/10/go-zap.md): go-zap日志双写，日志切割，使用的zap库中的sugar版本
+- [使用 kafka-go 实现消息生产与消费](https://codepzj.github.io/raw/2025/10/kafka-go.md): 介绍 kafka-go 的安装与使用，并通过 Go 示例实现消息生产、消费和偏移量读取。
+- [kratos中proto文件引入其他proto爆红](https://codepzj.github.io/raw/2025/10/kratos-proto-error.md): 记录 VS Code 开发 Kratos 时 Proto 文件跨目录引用报错的原因，以及插件配置解决方法。
+- [GitLab Runner 使用与 CICD 全面指南](https://codepzj.github.io/raw/2025/11/gitlab-ci.md): Gitlab使用教程以及CI/CD的配置，触发工作流，减少手动部署的成本
+- [Webhook 工作原理与 Go 实现](https://codepzj.github.io/raw/2025/11/what-is-webhook.md): 介绍 Webhook 的事件通知机制、典型使用场景，并使用 Go 和 Gin 实现简单的回调接口。
+- [gRPC 四种通信模式详解](https://codepzj.github.io/raw/2025/12/grpc-4method.md): 介绍 gRPC 的普通调用、客户端流、服务端流和双向流四种通信模式，并给出 Go 示例。
+- [gRPC 工作原理与通信流程](https://codepzj.github.io/raw/2025/12/grpc-internals.md): 解析 gRPC 基于 HTTP/2 和 Protocol Buffers 的通信流程，以及客户端与服务端调用的核心机制。
+- [MCP Server 基础概念与入门实践](https://codepzj.github.io/raw/2025/12/mcp-server-intro.md): mcp server原理理解，实操教程，ai客户端引入以及对ai编程的一些看法
+- [Protocol Buffers 核心语法详解](https://codepzj.github.io/raw/2025/12/proto-syntax.md): 系统介绍 Protocol Buffers 的消息、字段、枚举、服务、导入、oneof 和包装类型等核心语法。
+- [短视频的推荐算法](https://codepzj.github.io/raw/2025/12/recemmend-algorithm.md): 介绍短视频推荐系统中的用户画像、内容特征和召回排序思路，并结合业务需求分析实现方向。
+- [git-filter-repo 清理敏感信息](https://codepzj.github.io/raw/2026/01/git-filter-repo.md): git-filter-repo清理敏感信息，防止git提交了敏感信息后导致的密钥泄漏
+- [使用 Go 构建第一个 gRPC 服务](https://codepzj.github.io/raw/2026/01/grpc-hello-demo.md): 通过 Protocol Buffers 定义服务，生成 Go 代码并实现客户端与服务端，完成首个 gRPC 示例。
+- [gRPC Metadata 的传递与使用](https://codepzj.github.io/raw/2026/01/grpc-metadata.md): 介绍 gRPC Metadata 的创建、发送和读取方法，以及 Header、Trailer 在客户端与服务端之间的传递。
+- [Github CI自动发版](https://codepzj.github.io/raw/2026/02/git-semantic-release.md): 介绍如何通过 GitHub Actions 和 Semantic Release 自动生成版本号、Tag 与发布记录。
+- [Go遍历时删除特定元素](https://codepzj.github.io/raw/2026/02/go-delete-element-in-range.md): Go遍历时候删除元素时候的坑，不能正序删除，不然会引起索引错位
+- [Golang中的优雅关闭与退出](https://codepzj.github.io/raw/2026/02/go-graceful-shutdown.md): Golang中的优雅关闭与退出，去做一些日志刷盘、关闭基础设施和goroutine连接的操作。
+- [MySQL 表结构常用操作](https://codepzj.github.io/raw/2026/02/mysql-dev-table.md): 整理 MySQL 开发中常用的表结构操作，包括字段新增、修改、删除以及表结构维护相关 SQL。
+- [MySQL 用户与权限管理](https://codepzj.github.io/raw/2026/02/mysql-dev-user.md): 整理 MySQL 用户创建、授权、权限查看、权限刷新和用户删除等常用管理操作。
+- [MySQL 主从复制搭建与配置](https://codepzj.github.io/raw/2026/02/mysql-master-slave-copy.md): 介绍 MySQL 主从复制原理，并使用 Docker Compose 完成主库、从库和复制账号的配置。
+- [千万级 Mysql 表结构变更实战](https://codepzj.github.io/raw/2026/03/gh-ost-migrate-mysql-online.md): 利用 gh-ost 安全、实时地迁移数据，实现大表结构变更，无停机、无锁表。
+- [Kratos 配置管理实践](https://codepzj.github.io/raw/2026/04/kratos-config.md): 介绍 Kratos 配置文件的组织方式、配置加载流程以及在服务中读取和使用配置的方法。
+- [Kratos 项目目录结构详解](https://codepzj.github.io/raw/2026/04/kratos-folder.md): 解析 Kratos 项目的目录结构和各层职责，说明 service、biz、data 与 server 等模块的关系。
+- [Kratos 常用命令速查](https://codepzj.github.io/raw/2026/04/kratos-instruction.md): 整理 Kratos 项目运行、构建、添加 Proto 文件和生成服务代码等常用命令。
+- [Kratos 日志系统与 Zap 集成](https://codepzj.github.io/raw/2026/04/kratos-logger.md): 介绍 Kratos 日志组件的使用方式，并演示文件输出、Helper 封装以及与 Zap 日志库的集成。
+- [Kratos HTTP 请求与路由配置](https://codepzj.github.io/raw/2026/04/kratos-request.md): 介绍 Kratos HTTP 服务中的请求处理、路由注册和 transport/http 组件的基本使用方式。
+- [Kratos 自定义 HTTP 响应与错误处理](https://codepzj.github.io/raw/2026/04/kratos-resp-proxy.md): 介绍如何在 Kratos 中自定义 HTTP 成功响应与错误响应，并结合 Proto 错误码统一接口格式。
+- [Kratos 服务注册与发现实践](https://codepzj.github.io/raw/2026/04/kratos-svc-discover.md): 介绍 Kratos 接入 Consul 实现服务注册与发现，包括 Consul 部署、启动和客户端配置。
+- [Kratos 事务管理与循环依赖解决方案](https://codepzj.github.io/raw/2026/04/kratos-transaction.md): 介绍 Kratos 项目中的事务抽象方法，并通过接口解耦解决 data 与 biz 层之间的循环依赖。
+- [VS Code 中配置 Protobuf 开发环境](https://codepzj.github.io/raw/2026/04/kratos-vscode-proto.md): 介绍 VS Code 中 Protobuf 插件与导入路径的配置方法，解决 Kratos Proto 文件引用报错问题。
+- [wrk HTTP 压测工具使用与指标分析](https://codepzj.github.io/raw/2026/05/wrk.md): 本文围绕 wrk 压测工具展开，从基础使用到结果分析，结合错误率、尾延迟（P95/P99）、稳定性等核心指标，给出一套可落地的评估方法，用于定位系统性能瓶颈并计算稳定状态下的最大可承载吞吐量。
+- [本地 kubectl 管理远程](https://codepzj.github.io/raw/2026/06/local-kubectl-manage-remote.md): 介绍如何将远程 Minikube 集群的 kubeconfig 迁移到本地，处理证书数据、虚拟 IP、Docker 端口映射与 TLS 证书校验问题，实现本地 kubectl 管理远程 Kubernetes。
+- [工作中如何做好技术积累](https://codepzj.github.io/raw/2026/06/study-vs-work.md): 古人云：“活到老，学到老。”互联网算是最辛苦的行业之一，“加班”对工程师来说已是“家常便饭”，同时互联网技术又日新月异，很多工程师都疲于应付，叫苦不堪。以至于长期以来流传一个很广的误解：35岁是程序员工作的终点。  如何在繁忙的工作中做好技术积累，构建个人核心竞争力，相信是很多工程师同行
+- [使用 Fluent Bit 将 Kubernetes 日志采集到 ELK](https://codepzj.github.io/raw/2026/07/k8s-logs-to-elk-with-fluent-bit.md): 从日志链路设计开始，完整介绍 Elasticsearch、Kibana 与 Fluent Bit 的部署、鉴权、持久化、Kubernetes 元数据补充、索引验证及常见故障排查。
+- [macOS 使用华为手机调试 Flutter：ADB 设备为空排查](https://codepzj.github.io/raw/2026/08/flutter-huawei-usb-device-debugging.md): 记录在 macOS 上连接华为 Android 真机运行 Flutter 项目的完整过程，包含 ADB 无线配对与连接、USB 调试、MTP 模式、adb devices 为空及首次 Gradle 构建排查。
+- [macOS 搭建 Flutter Android 与 iOS 开发环境](https://codepzj.github.io/raw/2026/08/flutter-macos-environment-setup.md): 记录在 Apple Silicon Mac 上搭建 Flutter 开发环境的完整过程，包括 Android Studio、Android SDK、模拟器、Xcode、CocoaPods、代理配置以及 flutter doctor 常见问题。
+- [组件样式示例](https://codepzj.github.io/raw/previews/example.md)

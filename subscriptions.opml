@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>浩瀚星河的友链订阅</title>
+    <dateCreated>2025-07-25T16:00:00Z</dateCreated>
+    <dateModified>2026-08-06T17:38:54.467+00:00[UTC]</dateModified>
+    <ownerName>浩瀚星河</ownerName>
+    <ownerEmail></ownerEmail>
+    <ownerId>https://codepzj.github.io</ownerId>
+    <docs>https://opml.org/spec2.opml</docs>
+  </head>
+  <body>
+    <outline text="浩瀚星河" type="rss" xmlUrl="https://codepzj.github.io/atom.xml" created="2025-07-25T16:00:00Z" description="记录 Golang 学习与开发实践" htmlUrl="https://codepzj.github.io"></outline>
+  </body>
+</opml>
