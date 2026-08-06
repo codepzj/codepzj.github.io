@@ -76,7 +76,7 @@ export default defineAppConfig({
 			{
 				title: '信息',
 				items: [
-					{ icon: 'tabler:color-swatch', text: '主题和组件文档', url: '/theme' },
+					{ icon: 'tabler:components', text: '组件文档', url: '/previews/example' },
 				],
 			},
 		] satisfies Nav,
