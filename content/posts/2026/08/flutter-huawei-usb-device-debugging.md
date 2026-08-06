@@ -1,8 +1,8 @@
 ---
 title: "macOS 使用华为手机调试 Flutter：ADB 设备为空排查"
-description: "记录在 macOS 上连接华为 Android 真机运行 Flutter 项目的完整过程，包含二维码无线配对、USB 调试、MTP 模式、adb devices 为空及首次 Gradle 构建排查。"
+description: "记录在 macOS 上连接华为 Android 真机运行 Flutter 项目的完整过程，包含 ADB 无线配对与连接、USB 调试、MTP 模式、adb devices 为空及首次 Gradle 构建排查。"
 date: '2026-08-04'
-updated: '2026-08-04'
+updated: '2026-08-06'
 categories:
 - 移动开发
 tags:
@@ -51,6 +51,67 @@ flutter devices
 ```
 
 不同 EMUI 或 HarmonyOS 版本提供的选项可能不同。如果手机没有二维码配对入口，可以使用配对码，或者直接使用 USB 连接。
+
+## 使用配对码连接无线 ADB
+
+Android 11 及以上版本的无线调试分为两个步骤：先使用 `adb pair` 完成配对，再使用 `adb connect` 建立连接。配对通常只需要执行一次，而重新开启无线调试或网络发生变化后，可能需要再次执行连接。
+
+::alert{type="warning" title="配对端口和连接端口不同"}
+`adb pair` 使用“使用配对码配对设备”页面显示的配对端口；`adb connect` 使用“无线调试”主页面显示的 IP 地址和端口。不要将两个端口混用。
+::
+
+首先在手机中进入“设置 → 系统和更新 → 开发人员选项 → 无线调试”，点击“使用配对码配对设备”。页面会显示 IP 地址、配对端口和六位配对码，例如：
+
+```text [无线配对信息]
+IP 地址：192.168.0.106
+配对端口：45333
+配对码：123456
+```
+
+在 Mac 中执行：
+
+```bash [配对无线设备]
+adb pair 192.168.0.106:45333
+```
+
+根据提示输入手机显示的配对码。出现以下信息说明配对成功：
+
+```text
+Successfully paired to 192.168.0.106:45333
+```
+
+此时只是完成了 **Pair（配对）**，设备不一定会立即出现在 `adb devices` 中。返回手机的“无线调试”主页面，查看当前的“IP 地址和端口”，例如：
+
+```text [无线连接信息]
+IP 地址和端口：192.168.0.106:39175
+```
+
+这里的 `39175` 是连接端口。使用它执行：
+
+```bash [连接无线设备]
+adb connect 192.168.0.106:39175
+```
+
+连接成功后会看到：
+
+```text
+connected to 192.168.0.106:39175
+```
+
+最后检查 ADB 和 Flutter 是否已经识别设备：
+
+```bash [检查无线设备]
+adb devices -l
+flutter devices
+```
+
+`adb devices -l` 应该出现类似结果：
+
+```text
+192.168.0.106:39175 device product:... model:... device:...
+```
+
+如果 `adb connect` 提示连接失败，确认手机和 Mac 位于同一个局域网，并重新查看无线调试主页面中的连接端口。无线调试关闭后重新开启时，连接端口可能发生变化。
 
 ## 使用 USB 连接华为手机
 
