@@ -162,7 +162,32 @@ export default defineNuxtConfig({
 	content: {
 		build: {
 			markdown: {
-				highlight: false,
+				highlight: {
+					langs: [
+						'bash',
+						'dotenv',
+						'go',
+						'http',
+						'ini',
+						'json',
+						'makefile',
+						'md',
+						'mdc',
+						'powershell',
+						'properties',
+						'proto',
+						'python',
+						'sh',
+						'sql',
+						'toml',
+						'yaml',
+					],
+					theme: {
+						default: 'github-light',
+						dark: 'github-dark',
+					},
+					themes: ['github-light', 'github-dark'],
+				},
 				// @keep-sorted
 				remarkPlugins: {
 					[pluginPath('remark-music')]: {},
